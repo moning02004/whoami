@@ -1,0 +1,48 @@
+<section id="about" class="section pt-10">
+    <div class="mb-3">
+        <img id="profile-img"
+             src="{{ resume.profile_image.url }}"
+             class="w-[13rem] h-[13rem] rounded-full overflow-hidden border border-border mx-auto md:mx-0"/>
+    </div>
+
+    <div class="mb-3">
+        <div class="flex justify-between">
+            <span class="text-[2rem]">{{ resume.name }}</span>
+            <form action="{% url 'create_pdf' %}" method="post">
+                {% csrf_token %}
+                <button class="border rounded px-3 py-1 my-auto hover:bg-gray-100">PDF 다운로드</button>
+            </form>
+        </div>
+
+        <div class="flex gap-2">
+            <button onclick="location.href='mailto:{{ resume.email }}'" class="text-[1.5rem]">
+                <i class="fa-solid fa-envelope"></i>
+            </button>
+            {% for x in resume.links.all %}
+                <a href="{{ x.link }}" target="_blank" class="text-[1.5rem]">
+                    <i class="{{ x.icon_class}}"></i>
+                </a>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    {% if resume.introduction %}
+        <pre class="text-[1rem] my-3 font-pretendard whitespace-pre-wrap">{{ resume.introduction }}</pre>
+    {% else %}
+        <div class="text-muted my-3">소개를 입력해주세요.</div>
+    {% endif %}
+
+    {% if resume.expression_set.all %}
+        <div class="flex flex-wrap gap-2">
+            {% for x in resume.expression_set.all %}
+                <span class="text-accent bg-accent-bg border border-accent-border px-3 py-1 rounded-[0.5rem] tracking-wide">
+                {{ x.keyword }}
+                </span>
+            {% empty %}
+                <div class="text-muted my-3">나를 표현할 수 있는 키워드를 추가해보세요.</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+

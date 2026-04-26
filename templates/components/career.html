@@ -1,0 +1,28 @@
+<section id="career" class="section">
+    <div class="text-section tracking-[0.16em] uppercase mb-6"># 0{{ section_index }} — career</div>
+
+    <div class="flex flex-col">
+        {% for career in resume.careers.all %}
+            <div class="slide-panel gap-2 career-item flex py-4 rounded-lg cursor-pointer transition-colors group border-b last:border-0 border-border" data-id="careers/{{ career.id }}">
+                <div class="flex-[2] text-muted">
+                    {{ career.start_date|date:'Y.m' }}<br/>— {{ career.end_date|date:'Y.m'|default:"재직중" }}
+                </div>
+                <div class="flex-[8]">
+                    <div class="mb-1 tracking-wide font-bold text-xl">{{ career.company }}</div>
+                    <div class="text-sm mb-1 text-muted">{{ career.introduction }}</div>
+                    <div class="leading-[1.75] mb-3">{{ career.summary }}</div>
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        {% for skill in career.skills.all %}
+                            <span class="cstag">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="career-hint tracking-wide transition-colors text-border group-hover:text-accent">
+                        자세히 보기 →
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+

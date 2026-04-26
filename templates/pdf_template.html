@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --text: #1a1917;
+            --muted: #6b6866;
+            --accent: #1a6b4a;
+            --border: #dddbd6;
+            --box: #efefef;
+            --bg: #ffffff;
+            --surface: #f7f6f3;
+            --font-sans: 'Noto Sans KR', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            font-size: 11pt;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            padding: 8mm 5mm;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            margin-bottom: 22px;
+        }
+
+        .header-photo {
+            display: block;
+            width: 128px;
+            height: 128px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-name {
+            font-size: 20pt;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: var(--text);
+            margin-bottom: 8pt;
+        }
+
+        .header-contact {
+            font-size: 9pt;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ── INTRO ── */
+        .introduction {
+            color: var(--text);
+            padding-left: 5pt;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border-top: 1.5px solid var(--border);
+            margin: 30pt 0;
+        }
+
+        /* ── SECTION LABEL ── */
+        .section {
+            margin: 10pt 0;
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        /* ── CAREER ── */
+        .career-item {
+            display: flex;
+            margin-bottom: 18px;
+            page-break-inside: avoid;
+            border-bottom: 1px solid var(--border);
+            padding: 13pt 0;
+        }
+
+        .career-item:last-child {
+            border-bottom: 0;
+        }
+
+        .career-item > :first-child {
+            width: 110px;
+            flex-shrink: 0;
+        }
+
+        .career-item > :last-child {
+            flex: 1;
+        }
+
+        .career-item > * + * {
+            margin-left: 16px;
+        }
+
+        .career-left {
+            padding-top: 1px;
+        }
+
+        .career-period {
+            font-family: var(--font-mono);
+            font-size: 9pt;
+            color: var(--muted);
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+
+        .career-company {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1px;
+        }
+
+        .career-company-intro {
+            font-weight: 300;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-size: 9pt;
+        }
+
+        .career-company-position {
+            margin-bottom: 8px;
+            font-size: 10pt;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .bullet-list li {
+            color: var(--muted);
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .bullet-list li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: #b4ddc7;
+        }
+
+        .achievement-list li::before {
+            content: '✓';
+            color: var(--accent);
+            top: 1px;
+        }
+
+        .career-tech {
+            margin-top: 8px;
+        }
+
+        .career-tech-label {
+            font-family: var(--font-mono);
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            border: 1px solid var(--box);
+            padding: 1px 6px;
+            border-radius: 3px;
+            background-color: var(--box);
+        }
+
+        /* ── SKILLS ── */
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .skill-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skill-item:last-child {
+            border-bottom: none;
+        }
+
+        .skill-name {
+            font-size: 12pt;
+            font-weight: 500;
+            color: var(--text);
+            padding-top: 1px;
+        }
+
+        .skill-description {
+            color: var(--text);
+            padding-left: 5pt;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+
+        /* ── PROJECTS ── */
+        .project-item {
+            border-bottom: 1px solid var(--border);
+            padding: 13pt 0;
+        }
+
+        .project-content {
+            color: var(--text);
+            padding-left: 5pt;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 11pt;
+            margin-bottom: 11pt;
+        }
+
+        .project-result {
+            color: var(--text);
+            padding-left: 5pt;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+
+        .project-item:last-child {
+            border-bottom: 0;
+        }
+
+        .project-name {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .project-intro {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .others-item {
+            display: flex;
+            flex-direction: row;
+            padding: 10pt 0;
+        }
+
+        .others-item > .period {
+            width: 90pt;
+        }
+
+        .others-item > .name {
+            font-weight: 600;
+            width: 150pt;
+        }
+
+        .others-item > .content {
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HEADER
+══════════════════════════════ -->
+<div class="header">
+    <div class="header-info">
+        <div class="header-name">{{ resume.name }}</div>
+        <div class="header-contacts">
+            <div class="header-contact">
+                <span>{{ resume.email }}</span>
+            </div>
+            {% for x in links %}
+                <div class="header-contact">
+                    <span>{{ x.link }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- 소개 -->
+<div class="introduction">{{ resume.introduction }}</div>
+
+<hr class="divider"/>
+
+<!-- ══════════════════════════════
+     CAREER
+══════════════════════════════ -->
+<div class="section-label"># 01. Career</div>
+
+<div class="career-list">
+    {% for career in careers %}
+        <div class="career-item">
+
+            <!-- 좌: 기간 -->
+            <div class="career-left">
+                <div class="career-period">{{ career.start_date|date:'Y. m.' }}
+                    <br/>- {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
+            </div>
+
+            <!-- 우: 상세 -->
+            <div>
+                <div style="border-bottom: 1px solid #efefef; padding-bottom: 5px;">
+                    <div class="career-company">{{ career.company }}</div>
+                    <div class="career-company-intro">{{ career.introduction|default:'회사 소개' }}</div>
+                    <div class="career-company-position">{{ career.position }}</div>
+                </div>
+
+                <div>{{ career.description }}</div>
+
+                <!-- 회사 보유기술 -->
+                <div class="career-tech">
+                    <div class="tag-row">
+                        {% for tech in career.skills.all %}
+                            <span class="tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<hr class="divider"/>
+
+<!-- ══════════════════════════════
+     SKILLS
+══════════════════════════════ -->
+<div class="section-label"># 02. Skills</div>
+
+<div class="skills-list">
+    {% for skill in skills %}
+        <div class="skill-item">
+            <div class="skill-name">{{ skill.name }}</div>
+            <div class="skill-description">{{ skill.description }}</div>
+        </div>
+    {% endfor %}
+</div>
+
+<hr class="divider"/>
+
+<!-- ══════════════════════════════
+     PROJECTS
+══════════════════════════════ -->
+<div class="section-label"># 03. Projects</div>
+
+<div>
+    {% for project in projects %}
+        <div class="project-item">
+
+            <div>
+                <div class="project-name">{{ project.title }}</div>
+                <div class="project-intro">{{ project.introduction }}</div>
+            </div>
+            <div class="project-content">{{ project.content }}</div>
+            <div class="project-result">{{ project.result }}</div>
+            <div class="career-tech">
+                <div class="tag-row">
+                    {% for tag in project.skills.all %}
+                        <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<hr class="divider"/>
+
+<div class="section-label"># 04. Others</div>
+
+{% for other in others %}
+    <div class="others-item">
+        <div class="period">{{ other.period }}</div>
+        <div class="name">{{ other.name }}</div>
+        <div class="content">{{ other.content }}</div>
+    </div>
+{% endfor %}
+
+</body>
+</html>

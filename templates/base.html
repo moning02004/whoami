@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% load static %}
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ name }} · Backend Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="stylesheet" as="style" crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
+    <script src="/static/js/tailwind.conf.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://kit.fontawesome.com/db271158c1.js" crossorigin="anonymous"></script>
+</head>
+<body class="w-full md:w-[80%] mx-auto leading-relaxed bg-neutral-50 mb-[3rem]">
+<div class="flex h-full relative" id="page-wrapper">
+    <main class="flex-1 transition-all duration-300 ease-in-out" id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<aside id="slide-panel"
+       class="hidden fixed top-0 right-0 h-screen w-[100%] md:w-[50%] bg-white border-l border-gray-200 z-100 flex flex-col">
+    <div class="flex justify-between px-4 py-3 border-b border-gray-100">
+        <span id="panel-title" class="text-xl font-bold"></span>
+        <button class="text-gray-400 hover:text-gray-600 text-lg close-panel">✕</button>
+    </div>
+    <div id="panel-body"
+         class="flex-1 overflow-y-auto overscroll-contain p-4 whitespace-pre-wrap"></div>
+</aside>
+
+<script src="/static/js/slide_panel.js"></script>
+</body>
+</html>

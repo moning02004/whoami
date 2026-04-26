@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  # =========================
+  # NGINX
+  # =========================
+  nginx:
+    image: nginx:1.25
+    container_name: whoami-nginx
+    ports:
+      - "15081:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./static:/app/staticfiles
+    depends_on:
+      - whoami
+    restart: always
+    networks:
+      - whoami_net
+
+  # =========================
+  # Backend - BLUE
+  # =========================
+  whoami:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whoami-web
+    env_file:
+      - .env
+    expose:
+      - "18765"
+    restart: always
+    networks:
+      - whoami_net
+
+networks:
+  whoami_net:
+    driver: bridge
+

@@ -1,0 +1,20 @@
+<section id="project" class="section">
+    <div class="text-section tracking-[0.16em] uppercase mb-5"># 0{{ section_index }} — skills</div>
+
+    <div class="flex flex-col gap-10" id="skills-list">
+        <!-- Languages -->
+        <div class="flex flex-wrap gap-3">
+            {% for skill in resume.skills.all %}
+                <span class="text-accent border border-accent-border px-3 py-1 rounded-[0.5rem] tracking-wide cursor-pointer">
+                {{ skill.name }}
+                </span>
+                <div class="hidden description" id="skill-{{ skill.id }}">{{ skill.description }}</div>
+            {% empty %}
+                <span class="text-muted">
+                기술 스택을 추가해보세요.
+                </span>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>

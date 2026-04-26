@@ -1,0 +1,46 @@
+:root {
+    --bg: #fefefe;
+    --surface: #ffffff;
+    --surface2: #eeece8;
+    --border: #dddbd6;
+    --text: #1a1917;
+    --muted: #7a7870;
+    --accent: #3a58d9;
+    --accent-bg: #e8f5ee;
+    --accent-border: #b4ddc7;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-weight: 400;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+}
+
+/* ── Career stack tag ── */
+.cstag {
+    font-size: 0.8rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: .04em;
+    background: var(--bg);
+}
+
+.section {
+    padding: 0
+}
+
+.career-project-item > div:not(:first-child) {
+    padding-left: 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .section {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
