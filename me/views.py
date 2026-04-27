@@ -1,16 +1,47 @@
+from datetime import datetime
+
+from django.db.models import Prefetch
+from django.db.models.functions import Coalesce, Least
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from rest_framework import viewsets
 from weasyprint import HTML
 
-from me.models import Resume, Career, Project
+from me.models import Resume, Career, Project, Expression, Link, Skill, Career, Project
 from me.serializers import CareerDetailSerializer, ProjectDetailSerializer
 
 
 def index(request):
-    resume = Resume.objects.prefetch_related("expressions", "links", "skills", "careers", "projects").get(
-        is_represented=True)
+    resume = (Resume.objects.prefetch_related(
+        Prefetch(
+            'expressions',
+            queryset=Expression.objects.annotate(
+                effective_order=Least('resumeexpression__order', 'order')
+            ).order_by('effective_order').distinct()
+        ),
+        Prefetch(
+            'links',
+            queryset=Link.objects.annotate(
+                effective_order=Least('resumelink__order', 'order')
+            ).order_by('effective_order').distinct()
+        ),
+        Prefetch(
+            'skills',
+            queryset=Skill.objects.annotate(
+                effective_order=Least('resumeskill__order', 'order')
+            ).order_by('effective_order').distinct()
+        ),
+        Prefetch('careers', queryset=Career.objects.all().prefetch_related("skills").annotate(
+            exit_date=Coalesce("end_date", datetime.now().date()),
+        ).order_by("-exit_date")),
+        Prefetch(
+            'projects',
+            queryset=Project.objects.prefetch_related("skills").annotate(
+                effective_order=Least('resumeproject__order', 'order')
+            ).order_by('effective_order').distinct()
+        ),
+    ).get(is_represented=True))
 
     return render(request, "index.html", {
         "resume": resume,

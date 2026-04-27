@@ -7,6 +7,9 @@ class Link(models.Model):
     icon_class = models.CharField(max_length=100)
     order = models.IntegerField(default=100)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "링크"
         verbose_name_plural = "링크"
@@ -15,6 +18,9 @@ class Link(models.Model):
 class Expression(models.Model):
     keyword = models.CharField(max_length=100)
     order = models.IntegerField(default=100)
+
+    def __str__(self):
+        return self.keyword
 
     class Meta:
         verbose_name = "내소개 표현"
@@ -44,6 +50,9 @@ class Career(models.Model):
     summary = models.CharField(max_length=255, blank=True)
     skills = models.ManyToManyField(Skill)
 
+    def __str__(self):
+        return self.company
+
     class Meta:
         verbose_name = "경력"
         verbose_name_plural = "경력"
@@ -57,6 +66,9 @@ class CareerProject(models.Model):
     content = models.TextField(blank=True)
     result = models.TextField(blank=True)
     order = models.IntegerField(default=100)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = "경력 프로젝트"
@@ -73,6 +85,9 @@ class Others(models.Model):
 
     order = models.IntegerField(default=100)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "기타 사항"
         verbose_name_plural = "기타 사항"
@@ -86,6 +101,9 @@ class Project(models.Model):
     content = models.TextField(blank=True)
     result = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = "프로젝트"
