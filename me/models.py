@@ -72,8 +72,8 @@ class CareerProject(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "경력 프로젝트 이미지"
-        verbose_name_plural = "경력 프로젝트 이미지"
+        verbose_name = "경력 프로젝트"
+        verbose_name_plural = "경력 프로젝트"
 
 
 class CareerProjectFile(models.Model):
@@ -81,8 +81,8 @@ class CareerProjectFile(models.Model):
     file = models.FileField(upload_to='career_projects/%Y/%m/%d', blank=True)
 
     class Meta:
-        verbose_name = "경력 프로젝트"
-        verbose_name_plural = "경력 프로젝트"
+        verbose_name = "경력 프로젝트 참고자료"
+        verbose_name_plural = "경력 프로젝트 참고자료"
 
 
 class Others(models.Model):

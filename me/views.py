@@ -9,8 +9,8 @@ from django.template.loader import render_to_string
 from rest_framework import viewsets
 from weasyprint import HTML
 
-from me.models import Resume, Career, Project, Expression, Link, Skill, Career, Project
-from me.serializers import CareerDetailSerializer, ProjectDetailSerializer, SkillSerializer, SkillDetailSerializer
+from me.models import Resume, Expression, Link, Skill, Career, Project, Others
+from me.serializers import CareerDetailSerializer, ProjectDetailSerializer, SkillDetailSerializer
 
 
 def index(request):
@@ -81,25 +81,24 @@ class SkillViewSet(viewsets.ModelViewSet):
 
 
 def create_pdf(request):
-
     resume = (Resume.objects.prefetch_related(
         Prefetch(
             'expressions',
             queryset=Expression.objects.annotate(
                 effective_order=Least('resumeexpression__order', 'order')
-            ).order_by('effective_order').distinct()
+            ).order_by('effective_order', "id").distinct()
         ),
         Prefetch(
             'links',
             queryset=Link.objects.annotate(
                 effective_order=Least('resumelink__order', 'order')
-            ).order_by('effective_order').distinct()
+            ).order_by('effective_order', "id").distinct()
         ),
         Prefetch(
             'skills',
             queryset=Skill.objects.annotate(
                 effective_order=Least('resumeskill__order', 'order')
-            ).filter(is_visible=True).order_by('effective_order').distinct()
+            ).filter(is_visible=True).order_by('effective_order', "id").distinct()
         ),
         Prefetch('careers', queryset=Career.objects.all().prefetch_related("skills", "careerproject_set").annotate(
             exit_date=Coalesce("end_date", datetime.now().date()),
@@ -108,7 +107,13 @@ def create_pdf(request):
             'projects',
             queryset=Project.objects.prefetch_related("skills").annotate(
                 effective_order=Least('resumeproject__order', 'order')
-            ).order_by('effective_order').distinct()
+            ).order_by('effective_order', "id").distinct()
+        ),
+        Prefetch(
+            'others',
+            queryset=Others.objects.annotate(
+                effective_order=Least('resumeothers__order', 'order')
+            ).order_by('effective_order', "id").distinct()
         ),
     ).get(is_represented=True))
 
