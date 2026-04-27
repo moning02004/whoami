@@ -72,6 +72,15 @@ class CareerProject(models.Model):
         return self.title
 
     class Meta:
+        verbose_name = "경력 프로젝트 이미지"
+        verbose_name_plural = "경력 프로젝트 이미지"
+
+
+class CareerProjectFile(models.Model):
+    career_project = models.ForeignKey(CareerProject, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='career_projects/%Y/%m/%d', blank=True)
+
+    class Meta:
         verbose_name = "경력 프로젝트"
         verbose_name_plural = "경력 프로젝트"
 
@@ -111,6 +120,15 @@ class Project(models.Model):
         verbose_name_plural = "프로젝트"
 
 
+class ProjectFile(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='projects/%Y/%m/%d', blank=True)
+
+    class Meta:
+        verbose_name = "프로젝트 이미지"
+        verbose_name_plural = "프로젝트 이미지"
+
+
 class Resume(models.Model):
     title = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=100)
@@ -129,7 +147,7 @@ class Resume(models.Model):
     skills = models.ManyToManyField(Skill, through="ResumeSkill")
     careers = models.ManyToManyField(Career, through="ResumeCareer")
     projects = models.ManyToManyField(Project, through="ResumeProject")
-    others = models.ManyToManyField(Others, through="ResumeOhters")
+    others = models.ManyToManyField(Others, through="ResumeOthers")
 
     def __str__(self):
         return self.name
@@ -140,9 +158,9 @@ class Resume(models.Model):
         verbose_name_plural = "이력서"
 
 
-class ResumeOhters(models.Model):
+class ResumeOthers(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    other = models.ForeignKey(Others, on_delete=models.CASCADE)
+    others = models.ForeignKey(Others, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default=100)
 
 
