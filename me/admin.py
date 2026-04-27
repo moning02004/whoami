@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from me.models import Project, Resume, Link, Expression, Skill, Career, ResumeExpression, ResumeLink, ResumeSkill, \
-    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectImage, ProjectImage
+    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectFile, ProjectFile
 
 
 class ExpressionInline(admin.TabularInline):
@@ -91,14 +91,14 @@ class CareerProjectInline(admin.StackedInline):
     extra = 0
 
 
-class CareerProjectImageInline(admin.TabularInline):
-    model = CareerProjectImage
+class CareerProjectFileInline(admin.TabularInline):
+    model = CareerProjectFile
     show_change_link = True
     extra = 0
 
 
-class ProjectImageInline(admin.TabularInline):
-    model = ProjectImage
+class ProjectFileInline(admin.TabularInline):
+    model = ProjectFile
     show_change_link = True
     extra = 0
 
@@ -111,13 +111,13 @@ class CareerAdmin(admin.ModelAdmin):
 
 @admin.register(CareerProject)
 class CareerProjectAdmin(admin.ModelAdmin):
-    inlines = [CareerProjectImageInline]
+    inlines = [CareerProjectFileInline]
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ["title", "introduction"]
-    inlines = [ProjectImageInline]
+    inlines = [ProjectFileInline]
 
 
 @admin.register(Expression)

@@ -76,7 +76,7 @@ class CareerProject(models.Model):
         verbose_name_plural = "경력 프로젝트 이미지"
 
 
-class CareerProjectImage(models.Model):
+class CareerProjectFile(models.Model):
     career_project = models.ForeignKey(CareerProject, on_delete=models.CASCADE)
     file = models.FileField(upload_to='career_projects/%Y/%m/%d', blank=True)
 
@@ -120,7 +120,7 @@ class Project(models.Model):
         verbose_name_plural = "프로젝트"
 
 
-class ProjectImage(models.Model):
+class ProjectFile(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     file = models.FileField(upload_to='projects/%Y/%m/%d', blank=True)
 

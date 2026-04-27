@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (className) itemDiv.classList.add(className)
 
         Object.entries(attrs).forEach(([key, value]) => {
-            if (!data[key]) return;
+            if (!data[key] || !data[key]?.length) return;
             let attrDiv = document.createElement("div");
             attrDiv.classList.add("mb-3", "last:mb-0", "flex", "flex-col", "justify-between");
 
@@ -56,13 +56,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (data[key] === undefined) return;
 
-            if (typeof data[key] === "object") {
+            if (key === "skills") {
                 valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2");
                 data[key].map(x => x.name).forEach(x => {
                     let skillDiv = document.createElement("div");
                     skillDiv.classList.add("cstag", "bg-[#efefef]")
                     skillDiv.innerHTML = x
                     valueDiv.appendChild(skillDiv)
+                })
+            } else if (key === "files") {
+                valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2");
+                data[key].map(x => x.url).forEach(x => {
+                    let fileAnchor = document.createElement("a");
+
+                    let fileThumbnail = document.createElement("img");
+                    fileThumbnail.classList.add("block", "project-files", "w-[120px]", "h-[120px]", "bg-cover", "bg-center", "rounded", "cursor-pointer")
+                    fileThumbnail.src = x
+
+                    fileAnchor.href = x
+                    fileAnchor.appendChild(fileThumbnail)
+
+                    valueDiv.appendChild(fileAnchor)
                 })
             } else {
                 valueDiv.innerHTML = data[key]
@@ -96,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     "period": {classnames: ["text-muted"]},
                     "content": "주요 내용",
                     "result": "주요 성과",
+                    "files": "참고 자료"
                 }
                 getPanelBody(bodies, panelBody, subData, "career-project-item")
             })
@@ -110,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let bodies = {
                 "content": "주요 내용",
                 "result": "주요 성과",
+                "files": "참고 자료"
             }
             getPanelBody(bodies, panelBody, data)
         } else if (dataType === "skills") {

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from me.models import Career, Skill, CareerProject, Project, ProjectImage, CareerProjectImage
+from me.models import Career, Skill, CareerProject, Project, ProjectFile, CareerProjectFile
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -23,11 +23,11 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name, None)
 
 
-class CareerProjectImageSerializer(serializers.ModelSerializer):
+class CareerProjectFileSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='file.url', read_only=True)
 
     class Meta:
-        model = CareerProjectImage
+        model = CareerProjectFile
         fields = ["url"]
 
 
@@ -38,11 +38,11 @@ class SkillSerializer(DynamicFieldsModelSerializer):
 
 
 class CareerProjectSerializer(serializers.ModelSerializer):
-    images = CareerProjectImageSerializer(many=True, source="careerprojectimage_set")
+    files = CareerProjectFileSerializer(many=True, source="careerprojectfile_set")
 
     class Meta:
         model = CareerProject
-        fields = ["title", "period", "content", "result", "images"]
+        fields = ["title", "period", "content", "result", "files"]
 
 
 class CareerDetailSerializer(serializers.ModelSerializer):
@@ -60,20 +60,21 @@ class CareerDetailSerializer(serializers.ModelSerializer):
         return f"{obj.start_date} - {end}"
 
 
-class ProjectImageSerializer(serializers.ModelSerializer):
+class ProjectFileSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='file.url', read_only=True)
 
     class Meta:
-        model = ProjectImage
+        model = ProjectFile
         fields = ["url"]
+
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(fields=["name"], many=True)
-    images = ProjectImageSerializer(many=True, source="projectimage_set")
+    files = ProjectFileSerializer(many=True, source="projectfile_set")
 
     class Meta:
         model = Project
-        fields = ["title", "introduction", "content", "result", "skills", "images"]
+        fields = ["title", "introduction", "content", "result", "skills", "files"]
 
 
 class SkillDetailSerializer(serializers.ModelSerializer):
