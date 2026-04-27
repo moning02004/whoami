@@ -6,8 +6,37 @@ services:
     container_name: whoami-web
     env_file:
       - .env
+    environment:
+      TZ: Asia/Seoul
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    container_name: whoami-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: $DB_NAME
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      TZ: Asia/Seoul
+    volumes:
+      - whoami_data:/var/lib/postgresql/data
+    ports:
+      - "$DB_PORT:5432"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  whoami_data:

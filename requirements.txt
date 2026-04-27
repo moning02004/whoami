@@ -4,3 +4,4 @@ weasyprint
 gunicorn
 djangorestframework
 uvicorn[standard]>=0.27.1
+psycopg2-binary
