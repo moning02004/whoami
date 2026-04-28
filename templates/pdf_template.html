@@ -113,7 +113,9 @@
             line-height: 1.5;
             white-space: nowrap;
         }
-
+        .project-introduction {
+            margin-bottom: 6pt;
+        }
         .career-company {
             font-size: 15pt;
             font-weight: 700;
@@ -307,6 +309,9 @@
 
                             <div style="padding-left: 10pt;">
                                 <div class="project-intro">{{ project.period }}</div>
+                                {% if project.introduction %}
+                                    <div class="project-introduction">{{ project.introduction }}</div>
+                                {% endif %}
                                 <div class="label">주요 내용</div>
                                 <div class="project-content">{{ project.content }}</div>
                                 {% if project.result %}

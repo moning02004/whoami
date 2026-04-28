@@ -42,7 +42,7 @@ class CareerProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CareerProject
-        fields = ["title", "period", "content", "result", "files"]
+        fields = ["title", "introduction", "period", "content", "result", "files"]
 
 
 class CareerDetailSerializer(serializers.ModelSerializer):

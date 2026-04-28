@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (value.classnames?.length > 0) {
                 valueDiv.classList.add(...value.classnames)
             } else {
-                keyDiv.classList.add("text-[0.8rem]", "font-bold")
+                keyDiv.classList.add("text-[0.8rem]", "font-bold", "text-muted")
                 keyDiv.innerHTML = value
                 valueDiv.classList.add("text-[1rem]")
             }
@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 let bodies = {
                     "title": {classnames: ["font-bold", "text-xl"]},
                     "period": {classnames: ["text-muted"]},
+                    "introduction": "",
                     "content": "주요 내용",
                     "result": "주요 성과",
                     "files": "참고 자료"
