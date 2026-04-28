@@ -1,5 +1,5 @@
 
-[jnghn.xyz](https://me.jnghn.xyz) 에서 확인할 수 있습니다.
+[//]: # ([jnghn.xyz]&#40;https://me.jnghn.xyz&#41; 에서 확인할 수 있습니다.)
 
 ### 이 프로젝트에 적용한 기술
 - Docker 이미지 생성 및 배포
