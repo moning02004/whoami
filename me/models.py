@@ -122,6 +122,18 @@ class Project(models.Model):
         verbose_name_plural = "프로젝트"
 
 
+class ProjectUrl(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    url = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.url
+
+    class Meta:
+        verbose_name = "프로젝트 URL"
+        verbose_name_plural = "프로젝트 URL"
+
+
 class ProjectFile(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     file = models.FileField(upload_to='projects/%Y/%m/%d', blank=True)
