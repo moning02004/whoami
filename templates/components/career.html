@@ -9,7 +9,8 @@
                 </div>
                 <div class="flex-[8]">
                     <div class="mb-1 tracking-wide font-bold text-xl">{{ career.company }}</div>
-                    <div class="text-sm mb-1 text-muted">{{ career.introduction }}</div>
+                    <div class="text-sm mb-1 text-muted tracking-wide">{{ career.introduction }}</div>
+                    <div class="text-sm mb-1 tracking-wide whitespace-pre-wrap">{{ career.note }}</div>
                     <div class="leading-[1.75] mb-3">{{ career.summary }}</div>
                     <div class="flex flex-wrap gap-1.5 mb-3">
                         {% for skill in career.skills.all %}

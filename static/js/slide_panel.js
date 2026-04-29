@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const attrs = {
                 "introduction": "",
                 "period": "재직 기간",
+                "note": "",
                 "position": "직무 / 직급",
                 "summary": "업무 요약",
                 "skills": "기술스택",

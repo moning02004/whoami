@@ -52,11 +52,11 @@ class CareerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Career
-        fields = ["company", "position", "period", "introduction", "summary", "skills", "projects"]
+        fields = ["company", "position", "note", "period", "introduction", "summary", "skills", "projects"]
 
     @staticmethod
     def get_period(obj):
-        end = obj.end_date or "현재"
+        end = obj.end_date or "재직중"
         return f"{obj.start_date} - {end}"
 
 
