@@ -1,7 +1,7 @@
 from datetime import datetime
 from urllib.parse import quote
 
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F, When, Case
 from django.db.models.functions import Coalesce, Least
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from rest_framework import viewsets
 from weasyprint import HTML
 
-from me.models import Resume, Expression, Link, Skill, Career, Project, Others
+from me.models import Resume, Expression, Link, Skill, Career, Project, Others, ProjectUrl
 from me.serializers import CareerDetailSerializer, ProjectDetailSerializer, SkillDetailSerializer
 
 
@@ -62,7 +62,14 @@ class CareerDetailViewSet(viewsets.ModelViewSet):
 
 class ProjectDetailViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        return Project.objects.all()
+        queryset = Project.objects.prefetch_related("skills", "projectfile_set",
+                                                    Prefetch(
+                                                        "projecturl_set",
+                                                        ProjectUrl.objects.all().annotate(
+                                                            keyword=Case(When(name="", then=F("url"))),
+                                                            default=F("name")))
+                                                    )
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -105,7 +112,13 @@ def create_pdf(request):
         ).order_by("-exit_date")),
         Prefetch(
             'projects',
-            queryset=Project.objects.prefetch_related("skills").annotate(
+            queryset=Project.objects.prefetch_related(
+                "skills",
+                Prefetch(
+                    "projecturl_set",
+                    ProjectUrl.objects.all().annotate(
+                        keyword=Case(When(name="", then=F("url"))), default=F("name")))
+            ).annotate(
                 effective_order=Least('resumeproject__order', 'order')
             ).order_by('effective_order', "id").distinct()
         ),

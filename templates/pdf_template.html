@@ -113,9 +113,11 @@
             line-height: 1.5;
             white-space: nowrap;
         }
+
         .project-introduction {
             margin-bottom: 6pt;
         }
+
         .career-company {
             font-size: 15pt;
             font-weight: 700;
@@ -199,7 +201,7 @@
             white-space: pre-wrap;
             line-height: 1.6;
             font-size: 11pt;
-            margin-bottom: 11pt;
+            margin-bottom: 17pt;
         }
 
         .project-result {
@@ -243,6 +245,25 @@
         .title {
             font-size: 13pt;
         }
+
+        .url {
+            display: block;
+            margin-left: 5pt;
+            margin-top: 6pt;
+        }
+
+        .url:first-child {
+            margin-top: 0;
+        }
+
+        .url-box {
+            margin-bottom: 10pt;
+        }
+
+        .url-label {
+            font-weight: 600;
+        }
+
         .label {
             font-weight: 600;
         }
@@ -365,11 +386,28 @@
         <div class="project-item">
 
             <div>
-                <div class="project-name">{{ project.title }}</div>
+                <div class="project-name title">{{ project.title }}</div>
                 <div class="project-intro">{{ project.introduction }}</div>
             </div>
+
+            {% if project.projecturl_set.all %}
+                <div class="url-box">
+                    <div class="url-label">URL</div>
+                    <div>
+                        {% for url_info in project.projecturl_set.all %}
+                            <a class="url" href="{{ url_info.url }}">{{ url_info.keyword }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="label">주요 내용</div>
             <div class="project-content">{{ project.content }}</div>
-            <div class="project-result">{{ project.result }}</div>
+            {% if project.result %}
+                <div class="label">주요 성과</div>
+                <div class="project-result">{{ project.result }}</div>
+            {% endif %}
+
             <div class="career-tech">
                 <div class="tag-row">
                     {% for tag in project.skills.all %}
