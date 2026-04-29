@@ -150,7 +150,7 @@ def create_pdf(request):
         html_str = render_to_string('pdf_template.html', context)
         pdf = HTML(string=html_str).write_pdf()
 
-        filename = "유정훈_이력서"
+        filename = resume.title
         encoded = quote(filename, safe='')
         return HttpResponse(pdf, content_type='application/pdf',
                             headers={'Content-Disposition': f'attachment; filename="{encoded}.pdf"'})
