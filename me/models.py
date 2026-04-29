@@ -48,6 +48,7 @@ class Career(models.Model):
     end_date = models.DateField(null=True, blank=True)
 
     introduction = models.CharField(max_length=255, blank=True)
+    note = models.TextField(blank=True)
     summary = models.CharField(max_length=255, blank=True)
     skills = models.ManyToManyField(Skill)
 
