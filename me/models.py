@@ -124,6 +124,7 @@ class Project(models.Model):
 
 class ProjectUrl(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True)
     url = models.URLField(blank=True)
 
     def __str__(self):

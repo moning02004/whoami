@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from me.models import Project, Resume, Link, Expression, Skill, Career, ResumeExpression, ResumeLink, ResumeSkill, \
-    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectFile, ProjectFile
+    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectFile, ProjectFile, ProjectUrl
 
 
 class ExpressionInline(admin.TabularInline):
@@ -97,12 +97,6 @@ class CareerProjectFileInline(admin.TabularInline):
     extra = 0
 
 
-class ProjectFileInline(admin.TabularInline):
-    model = ProjectFile
-    show_change_link = True
-    extra = 0
-
-
 @admin.register(Career)
 class CareerAdmin(admin.ModelAdmin):
     list_display = ["company"]
@@ -114,10 +108,22 @@ class CareerProjectAdmin(admin.ModelAdmin):
     inlines = [CareerProjectFileInline]
 
 
+class ProjectFileInline(admin.TabularInline):
+    model = ProjectFile
+    show_change_link = True
+    extra = 0
+
+
+class ProjectUrlInline(admin.TabularInline):
+    model = ProjectUrl
+    show_change_link = True
+    extra = 0
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ["title", "introduction"]
-    inlines = [ProjectFileInline]
+    inlines = [ProjectFileInline, ProjectUrlInline]
 
 
 @admin.register(Expression)

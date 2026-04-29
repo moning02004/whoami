@@ -16,7 +16,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let valueDiv = document.createElement("div")
             valueDiv.classList.add("text-[1rem]")
-            if (typeof data[key] === "object") {
+            if (key === "urls") {
+                valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2", "pl-2");
+                data[key].forEach(x => {
+                    let anchor = document.createElement("a");
+                    anchor.classList.add("hover:underline", "text-blue-600")
+                    anchor.href = x.url
+                    anchor.innerHTML = x.keyword
+                    valueDiv.appendChild(anchor)
+                })
+            } else if (typeof data[key] === "object") {
                 valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2");
                 data[key].map(x => x.name).forEach(x => {
                     let skillDiv = document.createElement("div");
@@ -116,25 +125,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 getPanelBody(bodies, panelBody, subData, "career-project-item")
             })
         } else if (dataType === "projects") {
-            panelTitle.innerHTML = data.title;
             const attrs = {
                 "introduction": "",
                 "skills": "기술스택",
+                "urls": "관련 링크",
             }
             getPanelAttribute(attrs, panelBody, data)
-
+            panelTitle.innerHTML = data.title;
             let bodies = {
                 "content": "주요 내용",
                 "result": "주요 성과",
                 "files": "참고 자료"
             }
-            getPanelBody(bodies, panelBody, data)
+            getPanelBody(bodies, panelBody, data, "career-project-item")
+
         } else if (dataType === "skills") {
             panelTitle.innerHTML = data.name;
             const attrs = {
                 "description": "",
             }
-            getPanelAttribute(attrs, panelBody, data)
+            getPanelBody(attrs, panelBody, data)
         }
 
         document.getElementById('slide-panel').classList.remove('translate-x-full', "hidden");

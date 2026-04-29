@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from me.models import Career, Skill, CareerProject, Project, ProjectFile, CareerProjectFile
+from me.models import Career, Skill, CareerProject, Project, ProjectFile, CareerProjectFile, ProjectUrl
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -68,13 +68,22 @@ class ProjectFileSerializer(serializers.ModelSerializer):
         fields = ["url"]
 
 
+class ProjectUrlSerializer(serializers.ModelSerializer):
+    keyword = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = ProjectUrl
+        fields = ["keyword", "url"]
+
+
 class ProjectDetailSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(fields=["name"], many=True)
     files = ProjectFileSerializer(many=True, source="projectfile_set")
+    urls = ProjectUrlSerializer(many=True, source="projecturl_set")
 
     class Meta:
         model = Project
-        fields = ["title", "introduction", "content", "result", "skills", "files"]
+        fields = ["title", "introduction", "content", "result", "skills", "files", "urls"]
 
 
 class SkillDetailSerializer(serializers.ModelSerializer):
