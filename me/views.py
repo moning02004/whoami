@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from rest_framework import viewsets
 from weasyprint import HTML
 
-from me.models import Resume, Expression, Link, Skill, Career, Project, Others, ProjectUrl
+from me.models import Resume, Expression, Link, Skill, Career, Project, Others, ProjectUrl, CareerProject
 from me.serializers import CareerDetailSerializer, ProjectDetailSerializer, SkillDetailSerializer
 
 
@@ -52,7 +52,10 @@ def index(request):
 class CareerDetailViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
-        return Career.objects.all()
+        return Career.objects.all().prefetch_related(
+            "skills",
+            Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
+        )
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -107,7 +110,10 @@ def create_pdf(request):
                 effective_order=Least('resumeskill__order', 'order')
             ).filter(is_visible=True).order_by('effective_order', "id").distinct()
         ),
-        Prefetch('careers', queryset=Career.objects.all().prefetch_related("skills", "careerproject_set").annotate(
+        Prefetch('careers', queryset=Career.objects.all().prefetch_related(
+            "skills",
+            Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
+        ).annotate(
             exit_date=Coalesce("end_date", datetime.now().date()),
         ).order_by("-exit_date")),
         Prefetch(
