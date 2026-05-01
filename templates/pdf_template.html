@@ -230,6 +230,14 @@
             font-weight: 700;
             color: var(--text);
         }
+        .cover-letter-intro {
+            padding-left: 5pt;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 11pt;
+            text-indent: 5pt;
+            margin-bottom: 4pt;
+        }
 
         .project-intro {
             color: var(--muted);
@@ -455,7 +463,11 @@
                 {% for cover_letter in cover_letters %}
                     <div class="project-item">
                         <div class="project-name title">{{ cover_letter.title }}</div>
-                        <div class="project-intro indent">{{ cover_letter.content }}</div>
+                        <div>
+                          {% for line in cover_letter.content.splitlines %}
+                            <p class="indent-8 cover-letter-intro">{{ line }}</p>
+                          {% endfor %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
