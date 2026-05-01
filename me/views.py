@@ -131,7 +131,7 @@ def create_pdf(request):
                 "others": resume.others.all(),
                 "cover_letters": resume.cover_letters.all()
             }
-        elif pdf_type == "portfolio":
+        else:
             queryset = queryset.prefetch_related(
                 Prefetch(
                     'skills',
@@ -154,8 +154,6 @@ def create_pdf(request):
             )
             resume = queryset.get(is_represented=True)
             context = {
-                "resume": resume,
-                "links": resume.links.all(),
                 "skills": resume.skills.all(),
                 "projects": resume.projects.all(),
             }
@@ -163,7 +161,7 @@ def create_pdf(request):
         html_str = render_to_string('pdf_template.html', context)
         pdf = HTML(string=html_str).write_pdf()
 
-        filename = resume.title
+        filename = f"{resume.name} - {pdf_type.upper()}"
         encoded = quote(filename, safe='')
         return HttpResponse(pdf, content_type='application/pdf',
                             headers={'Content-Disposition': f'attachment; filename="{encoded}.pdf"'})

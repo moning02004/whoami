@@ -292,32 +292,33 @@
 <!-- ══════════════════════════════
      HEADER
 ══════════════════════════════ -->
-<div class="header">
-    <div class="header-info">
-        <div class="header-name">{{ resume.name }}</div>
-        <div class="header-contacts">
-            <div class="header-contact">
-                <span>{{ resume.email }}</span>
-            </div>
-            {% for x in links %}
+{% if resume %}
+
+    <div class="header">
+        <div class="header-info">
+            <div class="header-name">{{ resume.name }}</div>
+            <div class="header-contacts">
                 <div class="header-contact">
-                    <span>{{ x.link }}</span>
+                    <span>{{ resume.email }}</span>
                 </div>
-            {% endfor %}
+                {% for x in links %}
+                    <div class="header-contact">
+                        <span>{{ x.link }}</span>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 
-<!-- 소개 -->
-<div class="introduction">{{ resume.introduction }}</div>
-
-<hr class="divider"/>
+    <!-- 소개 -->
+    <div class="introduction">{{ resume.introduction }}</div>
+    <hr class="divider"/>
+{% endif %}
 
 <!-- ══════════════════════════════
      CAREER
 ══════════════════════════════ -->
 <div>
-
     {% if careers %}
         <div class="section">
             <div class="section-label"># 경력</div>
