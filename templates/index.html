@@ -2,20 +2,28 @@
 
 {% block content %}
     {% include 'components/about.html' %}
-    <div class="w-full border border my-10 border-[#afafaf]"></div>
 
     <!-- ═══ Career ═══ -->
-    {% include 'components/career.html' %}
-    <div class="w-full border border my-10 border-[#afafaf]"></div>
+    {% if resume.careers.all %}
+        <div class="w-full border border my-10 border-[#afafaf]"></div>
+        {% include 'components/career.html' %}
+    {% endif %}
 
     <!-- ═══ Skills ═══ -->
-    {% include 'components/skills.html' %}
-    <div class="w-full border border my-10 border-[#afafaf]"></div>
+    {% if resume.skills.all %}
+        <div class="w-full border border my-10 border-[#afafaf]"></div>
+        {% include 'components/skills.html' %}
+    {% endif %}
 
     <!-- ═══ Cover Letters ═══ -->
-    {% include 'components/projects.html' %}
-    <div class="w-full border border my-10 border-[#afafaf]"></div>
+    {% if resume.projects.all %}
+        <div class="w-full border border my-10 border-[#afafaf]"></div>
+        {% include 'components/projects.html' %}
+    {% endif %}
 
     <!-- ═══ PROJECTS ═══ -->
-    {% include 'components/cover_letters.html' %}
+    {% if resume.cover_letters.all %}
+        <div class="w-full border border my-10 border-[#afafaf]"></div>
+        {% include 'components/cover_letters.html' %}
+    {% endif %}
 {% endblock %}
