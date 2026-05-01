@@ -145,6 +145,18 @@ class ProjectFile(models.Model):
         verbose_name_plural = "프로젝트 이미지"
 
 
+class CoverLetter(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "자기소개서"
+        verbose_name_plural = "자기소개서"
+
+
 class Resume(models.Model):
     title = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=100)
@@ -164,6 +176,7 @@ class Resume(models.Model):
     careers = models.ManyToManyField(Career, through="ResumeCareer")
     projects = models.ManyToManyField(Project, through="ResumeProject")
     others = models.ManyToManyField(Others, through="ResumeOthers")
+    cover_letters = models.ManyToManyField(CoverLetter, through="ResumeCoverLetter")
 
     def __str__(self):
         return self.name
@@ -206,4 +219,10 @@ class ResumeCareer(models.Model):
 class ResumeExpression(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     expression = models.ForeignKey(Expression, on_delete=models.CASCADE)
+    order = models.IntegerField(default=100)
+
+
+class ResumeCoverLetter(models.Model):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    cover_letter = models.ForeignKey(CoverLetter, on_delete=models.CASCADE)
     order = models.IntegerField(default=100)

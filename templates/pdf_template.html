@@ -82,6 +82,10 @@
             margin-bottom: 12px;
         }
 
+        .section:not(:first-child) {
+            break-before: page;
+        }
+
         /* ── CAREER (table 방식) ── */
         .career-list {
             width: 100%;
@@ -274,6 +278,10 @@
             font-weight: 600;
         }
 
+        .indent {
+            text-indent: 5pt;
+        }
+
         .others-item > .content {
             color: var(--muted);
         }
@@ -308,135 +316,167 @@
 <!-- ══════════════════════════════
      CAREER
 ══════════════════════════════ -->
-<div class="section-label"># 01. Career</div>
-
-<table class="career-list">
-    {% for career in careers %}
-        <tr class="career-item">
-
-            <!-- 좌: 기간 -->
-            <td class="career-left">
-                <div class="career-period">{{ career.start_date|date:'Y. m.' }}
-                    <br/>- {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
-            </td>
-
-            <!-- 우: 상세 -->
-            <td class="career-right">
-                <div style="border-bottom: 1px solid #efefef; padding-bottom: 5px;">
-                    <div class="career-company">{{ career.company }}</div>
-                    <div class="career-company-intro">{{ career.introduction }}</div>
-                    <div class="career-company-note">{{ career.note }}</div>
-                    <div class="career-company-position">{{ career.position }}</div>
-                    <div>{{ career.summary }}</div>
-                </div>
-
-                <div>
-                    {% for project in career.careerproject_set.all %}
-                        <div class="project-item">
-                            <div class="project-name title">{{ project.title }}</div>
-
-                            <div style="padding-left: 10pt;">
-                                <div class="project-intro">{{ project.period }}</div>
-                                {% if project.introduction %}
-                                    <div class="project-introduction">{{ project.introduction }}</div>
-                                {% endif %}
-                                <div class="label">주요 내용</div>
-                                <div class="project-content">{{ project.content }}</div>
-                                {% if project.result %}
-                                    <div class="label">주요 성과</div>
-                                    <div class="project-result">{{ project.result }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <!-- 회사 보유기술 -->
-                <div class="career-tech">
-                    <div class="tag-row">
-                        {% for tech in career.skills.all %}
-                            <span class="tag">{{ tech }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-    {% endfor %}
-</table>
-
-<hr class="divider"/>
-
-<!-- ══════════════════════════════
-     SKILLS
-══════════════════════════════ -->
-<div class="section-label"># 02. Skills</div>
-
-<div class="skills-list">
-    {% for skill in skills %}
-        <div class="skill-item">
-            <div class="skill-name">{{ skill.name }}</div>
-            <div class="skill-description">{{ skill.description }}</div>
-        </div>
-    {% endfor %}
-</div>
-
-<hr class="divider"/>
-
-<!-- ══════════════════════════════
-     PROJECTS
-══════════════════════════════ -->
-<div class="section-label"># 03. Projects</div>
-
 <div>
-    {% for project in projects %}
-        <div class="project-item">
+
+    {% if careers %}
+        <div class="section">
+            <div class="section-label"># 경력</div>
+
+            <table class="career-list">
+                {% for career in careers %}
+                    <tr class="career-item">
+
+                        <!-- 좌: 기간 -->
+                        <td class="career-left">
+                            <div class="career-period">{{ career.start_date|date:'Y. m.' }}
+                                <br/>- {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
+                        </td>
+
+                        <!-- 우: 상세 -->
+                        <td class="career-right">
+                            <div style="border-bottom: 1px solid #efefef; padding-bottom: 5px;">
+                                <div class="career-company">{{ career.company }}</div>
+                                <div class="career-company-intro">{{ career.introduction }}</div>
+                                <div class="career-company-note">{{ career.note }}</div>
+                                <div class="career-company-position">{{ career.position }}</div>
+                                <div>{{ career.summary }}</div>
+                            </div>
+
+                            <div>
+                                {% for project in career.careerproject_set.all %}
+                                    <div class="project-item">
+                                        <div class="project-name title">{{ project.title }}</div>
+
+                                        <div style="padding-left: 10pt;">
+                                            <div class="project-intro">{{ project.period }}</div>
+                                            {% if project.introduction %}
+                                                <div class="project-introduction">{{ project.introduction }}</div>
+                                            {% endif %}
+                                            <div class="label">주요 내용</div>
+                                            <div class="project-content">{{ project.content }}</div>
+                                            {% if project.result %}
+                                                <div class="label">주요 성과</div>
+                                                <div class="project-result">{{ project.result }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- 회사 보유기술 -->
+                            <div class="career-tech">
+                                <div class="tag-row">
+                                    {% for tech in career.skills.all %}
+                                        <span class="tag">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <hr class="divider"/>
+    {% endif %}
+
+    <!-- ══════════════════════════════
+         SKILLS
+    ══════════════════════════════ -->
+    {% if skills %}
+        <div class="section">
+            <div class="section-label"># 보유 기술</div>
+
+            <div class="skills-list">
+                {% for skill in skills %}
+                    <div class="skill-item">
+                        <div class="skill-name">{{ skill.name }}</div>
+                        <div class="skill-description">{{ skill.description }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <hr class="divider"/>
+    {% endif %}
+
+    <!-- ══════════════════════════════
+         PROJECTS
+    ══════════════════════════════ -->
+    {% if projects %}
+        <div class="section">
+            <div class="section-label"># 프로젝트</div>
 
             <div>
-                <div class="project-name title">{{ project.title }}</div>
-                <div class="project-intro">{{ project.introduction }}</div>
-            </div>
+                {% for project in projects %}
+                    <div class="project-item">
 
-            {% if project.projecturl_set.all %}
-                <div class="url-box">
-                    <div class="url-label">URL</div>
-                    <div>
-                        {% for url_info in project.projecturl_set.all %}
-                            <a class="url" href="{{ url_info.url }}">{{ url_info.keyword }}</a>
-                        {% endfor %}
+                        <div>
+                            <div class="project-name title">{{ project.title }}</div>
+                            <div class="project-intro">{{ project.introduction }}</div>
+                        </div>
+
+                        {% if project.projecturl_set.all %}
+                            <div class="url-box">
+                                <div class="url-label">URL</div>
+                                <div>
+                                    {% for url_info in project.projecturl_set.all %}
+                                        <a class="url" href="{{ url_info.url }}">{{ url_info.keyword }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="label">주요 내용</div>
+                        <div class="project-content">{{ project.content }}</div>
+                        {% if project.result %}
+                            <div class="label">주요 성과</div>
+                            <div class="project-result">{{ project.result }}</div>
+                        {% endif %}
+
+                        <div class="career-tech">
+                            <div class="tag-row">
+                                {% for tag in project.skills.all %}
+                                    <span class="tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-
-            <div class="label">주요 내용</div>
-            <div class="project-content">{{ project.content }}</div>
-            {% if project.result %}
-                <div class="label">주요 성과</div>
-                <div class="project-result">{{ project.result }}</div>
-            {% endif %}
-
-            <div class="career-tech">
-                <div class="tag-row">
-                    {% for tag in project.skills.all %}
-                        <span class="tag">{{ tag }}</span>
-                    {% endfor %}
-                </div>
+                {% endfor %}
             </div>
         </div>
-    {% endfor %}
+        <hr class="divider"/>
+    {% endif %}
+
+    {% if others %}
+        <div class="section">
+            <div class="section-label"># 기타 사항</div>
+            <div>
+                {% for other in others %}
+                    <div class="others-item">
+                        <div class="period">{{ other.period }}</div>
+                        <div class="name">{{ other.name }}</div>
+                        <div class="content">{{ other.content }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <hr class="divider"/>
+    {% endif %}
+
+    {% if cover_letters %}
+        <div class="section">
+            <div class="section-label"># 자기소개서</div>
+            <div>
+                {% for cover_letter in cover_letters %}
+                    <div class="project-item">
+                        <div class="project-name title">{{ cover_letter.title }}</div>
+                        <div class="project-intro indent">{{ cover_letter.content }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 </div>
-
-<hr class="divider"/>
-
-<div class="section-label"># 04. Others</div>
-
-{% for other in others %}
-    <div class="others-item">
-        <div class="period">{{ other.period }}</div>
-        <div class="name">{{ other.name }}</div>
-        <div class="content">{{ other.content }}</div>
-    </div>
-{% endfor %}
 
 </body>
 </html>

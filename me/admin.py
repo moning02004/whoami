@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from me.models import Project, Resume, Link, Expression, Skill, Career, ResumeExpression, ResumeLink, ResumeSkill, \
-    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectFile, ProjectFile, ProjectUrl
+    ResumeCareer, ResumeProject, CareerProject, ResumeOthers, Others, CareerProjectFile, ProjectFile, ProjectUrl, \
+    ResumeCoverLetter, CoverLetter
 
 
 class ExpressionInline(admin.TabularInline):
@@ -27,7 +28,6 @@ class SkillInline(admin.TabularInline):
 
 class CareerInline(admin.TabularInline):
     model = ResumeCareer
-    show_change_link = True
     extra = 0
     raw_id_fields = ["career"]
 
@@ -46,10 +46,18 @@ class OthersInline(admin.TabularInline):
     raw_id_fields = ["others"]
 
 
+class CoverLetterInline(admin.TabularInline):
+    model = ResumeCoverLetter
+    show_change_link = True
+    extra = 0
+    raw_id_fields = ["cover_letter"]
+
+
 @admin.register(Resume)
 class MyInfoAdmin(admin.ModelAdmin):
     list_display = ["title", "name", "is_represented", "created_at"]
     inlines = [ExpressionInline,
+               CoverLetterInline,
                LinkInline,
                SkillInline,
                CareerInline,
@@ -72,13 +80,18 @@ class MyInfoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Link)
-class MyInfoAdmin(admin.ModelAdmin):
+class LinkAdmin(admin.ModelAdmin):
     list_display = ["name", "link"]
+
+
+@admin.register(CoverLetter)
+class CoverLetterAdmin(admin.ModelAdmin):
+    list_display = ["title"]
 
 
 @admin.register(Skill)
 class MyInfoAdmin(admin.ModelAdmin):
-    list_display = ["name", "short_description"]
+    list_display = ["name", "short_description", "order", "is_visible"]
 
     @admin.display(description="Description")
     def short_description(self, obj):

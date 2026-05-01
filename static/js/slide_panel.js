@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
             let valueDiv = document.createElement("div")
             valueDiv.classList.add("text-[1rem]")
             if (key === "urls") {
-                valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2", "pl-2");
+                valueDiv.classList.add("mb-4", "last:mb-0", "pl-2");
                 data[key].forEach(x => {
                     let anchor = document.createElement("a");
-                    anchor.classList.add("hover:underline", "text-blue-600")
+                    anchor.classList.add("hover:underline", "text-blue-600", "block")
                     anchor.href = x.url
                     anchor.innerHTML = x.keyword
                     valueDiv.appendChild(anchor)

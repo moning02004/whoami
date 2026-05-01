@@ -6,12 +6,27 @@
     </div>
 
     <div class="mb-3">
-        <div class="flex justify-between">
-            <span class="text-[2rem]">{{ resume.name }}</span>
-            <form action="{% url 'create_pdf' %}" method="post">
-                {% csrf_token %}
-                <button class="border rounded px-3 py-1 my-auto hover:bg-gray-100">PDF 다운로드</button>
-            </form>
+        <div class="flex justify-between items-center">
+            <span class="text-[2rem] truncate min-w-0 mr-2">{{ resume.name }}</span>
+
+            <div class="flex items-center gap-2 shrink-0">
+                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="resume">
+                    <button class="border rounded px-3 py-1.5 hover:bg-gray-100 flex items-center gap-1.5 text-sm">
+                        <i class="fa-regular fa-file-lines"></i>
+                        <span class="hidden sm:inline">이력서</span>
+                    </button>
+                </form>
+                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="portfolio">
+                    <button class="border rounded px-3 py-1.5 hover:bg-gray-100 flex items-center gap-1.5 text-sm">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span class="hidden sm:inline">포트폴리오</span>
+                    </button>
+                </form>
+            </div>
         </div>
 
         <div class="flex gap-2">
@@ -20,10 +35,9 @@
             </button>
             {% for x in resume.links.all %}
                 <a href="{{ x.link }}" target="_blank" class="text-[1.5rem]">
-                    <i class="{{ x.icon_class}}"></i>
+                    <i class="{{ x.icon_class }}"></i>
                 </a>
             {% endfor %}
-
         </div>
     </div>
 
@@ -37,7 +51,7 @@
         <div class="flex flex-wrap gap-2">
             {% for x in resume.expression_set.all %}
                 <span class="text-accent bg-accent-bg border border-accent-border px-3 py-1 rounded-[0.5rem] tracking-wide">
-                {{ x.keyword }}
+                    {{ x.keyword }}
                 </span>
             {% empty %}
                 <div class="text-muted my-3">나를 표현할 수 있는 키워드를 추가해보세요.</div>
@@ -45,4 +59,3 @@
         </div>
     {% endif %}
 </section>
-

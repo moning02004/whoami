@@ -1,0 +1,13 @@
+<section id="project" class="section">
+    <div class="text-section tracking-[0.16em] uppercase mb-6"># 자기소개서</div>
+
+    <div class="flex flex-wrap gap-5">
+        {% for cover_letter in resume.cover_letters.all %}
+            <div class="flex flex-col rounded p-4 border-b border-border last:border-0">
+                <div class="tracking-wide font-bold text-xl mb-3">{{ cover_letter.title }}</div>
+                <div class="mb-3 indent-2 tracking-wide">{{ cover_letter.content }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
