@@ -1,3 +1,5 @@
+{% load customs %}
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -61,8 +63,7 @@
         /* ── INTRO ── */
         .introduction {
             color: var(--text);
-            padding-left: 5pt;
-            white-space: pre-wrap;
+            padding-left: 1rem;
             line-height: 1.6;
             font-size: 11pt;
         }
@@ -319,7 +320,7 @@
     </div>
 
     <!-- 소개 -->
-    <div class="introduction">{{ resume.introduction }}</div>
+    <div class="introduction">{{ resume.introduction|to_markdown }}</div>
     <hr class="divider"/>
 {% endif %}
 

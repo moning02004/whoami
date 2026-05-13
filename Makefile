@@ -70,7 +70,7 @@ logs-all: ## 전체 컨테이너 로그 확인
 
 .PHONY: shell
 shell: ## Django shell 진입
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py shell
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py shell
 
 .PHONY: bash
 bash: ## 컨테이너 bash 진입 (ex: make bash / make bash SERVICE=db)
@@ -78,31 +78,31 @@ bash: ## 컨테이너 bash 진입 (ex: make bash / make bash SERVICE=db)
 
 .PHONY: migrate
 migrate: ## 마이그레이션 실행
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py migrate
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py migrate
 
 .PHONY: makemigrations
 makemigrations: ## 마이그레이션 파일 생성 (ex: make makemigrations / make makemigrations APP=users)
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py makemigrations $(APP)
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py makemigrations $(APP)
 
 .PHONY: showmigrations
 showmigrations: ## 마이그레이션 상태 확인 (ex: make showmigrations / make showmigrations APP=users)
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py showmigrations $(APP)
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py showmigrations $(APP)
 
 .PHONY: sqlmigrate
 sqlmigrate: ## 마이그레이션 SQL 확인 (ex: make sqlmigrate APP=users NUM=0001)
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py sqlmigrate $(APP) $(NUM)
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py sqlmigrate $(APP) $(NUM)
 
 .PHONY: createsuperuser
 createsuperuser: ## 슈퍼유저 생성
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py createsuperuser
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py createsuperuser
 
 .PHONY: collectstatic
 collectstatic: ## 스태틱 파일 수집
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py collectstatic --no-input
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py collectstatic --no-input
 
 .PHONY: check
 check: ## Django 시스템 체크
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py check
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py check
 
 # ================================
 # Database
@@ -114,12 +114,12 @@ dbshell: ## PostgreSQL shell 진입
 
 .PHONY: dumpdata
 dumpdata: ## DB 데이터 덤프 (ex: make dumpdata / make dumpdata APP=users)
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py dumpdata $(app) --indent 2 > dump.json
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py dumpdata $(app) --indent 2 > dump.json
 	@echo "✅ dump.json 으로 저장되었습니다"
 
 .PHONY: loaddata
 loaddata: ## DB 데이터 로드 (ex: make loaddata FILE=dump.json)
-	docker compose $(COMPOSE_FILE) exec whoami python manage.py loaddata $(FILE)
+	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py loaddata $(FILE)
 
 # ================================
 # Cleanup

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 
@@ -214,6 +216,11 @@ class ResumeSkill(models.Model):
 class ResumeCareer(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     career = models.ForeignKey(Career, on_delete=models.CASCADE)
+
+    @property
+    def career_year(self):
+        end_date = self.career.end_date or datetime.now().date()
+        return (end_date - self.career.start_date).days / 365
 
 
 class ResumeExpression(models.Model):

@@ -17,7 +17,9 @@ from me.serializers import CareerDetailSerializer, ProjectDetailSerializer, Skil
 
 
 def index(request):
-    resume = (Resume.objects.prefetch_related(
+    resume_id = request.GET.get("resume_id", "")
+
+    queryset = Resume.objects.prefetch_related(
         Prefetch(
             'expressions',
             queryset=Expression.objects.annotate(
@@ -45,8 +47,9 @@ def index(request):
                 effective_order=Least('resumeproject__order', 'order')
             ).order_by('effective_order').distinct()
         ),
-    ).get(is_represented=True))
+    )
 
+    resume = queryset.get(is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
     return render(request, "index.html", {
         "resume": resume,
     })
@@ -96,6 +99,7 @@ class SkillViewSet(viewsets.ModelViewSet):
 def create_pdf(request):
     queryset = Resume.objects.all()
     if request.method == "POST":
+        resume_id = request.POST.get("resume_id", "")
         pdf_type = request.POST["type"]
 
         if pdf_type == "resume":
@@ -123,7 +127,8 @@ def create_pdf(request):
                          ).order_by('effective_order', "id").distinct()
                          ),
             )
-            resume = queryset.get(is_represented=True)
+            resume = queryset.get(
+                is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
             context = {
                 "resume": resume,
                 "links": resume.links.all(),
@@ -152,7 +157,8 @@ def create_pdf(request):
                     ).order_by('effective_order', "id").distinct()
                 ),
             )
-            resume = queryset.get(is_represented=True)
+            resume = queryset.get(
+                is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
             context = {
                 "skills": resume.skills.all(),
                 "projects": resume.projects.all(),
@@ -165,7 +171,10 @@ def create_pdf(request):
         encoded = quote(filename, safe='')
         return HttpResponse(pdf, content_type='application/pdf',
                             headers={'Content-Disposition': f'attachment; filename="{encoded}.pdf"'})
-    resume = queryset.get(is_represented=True)
+
+    resume_id = request.GET.get("resume_id", "")
+    resume = queryset.get(
+        is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
     context = {
         "resume": resume,
         "links": resume.links.all(),

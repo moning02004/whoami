@@ -38,6 +38,11 @@ body {
     padding-left: 0.5rem;
 }
 
+ul {
+    list-style: disc !important;
+    padding-left: 1rem !important;
+}
+
 @media (max-width: 640px) {
     .section {
         padding-left: 2rem;
