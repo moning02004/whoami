@@ -1,6 +1,13 @@
+import markdown
+from django.utils.safestring import mark_safe
 from rest_framework import serializers
 
 from me.models import Career, Skill, CareerProject, Project, ProjectFile, CareerProjectFile, ProjectUrl
+
+
+class MarkdownField(serializers.CharField):
+    def to_representation(self, value):
+        return mark_safe(markdown.markdown(value))
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -32,6 +39,8 @@ class CareerProjectFileSerializer(serializers.ModelSerializer):
 
 
 class SkillSerializer(DynamicFieldsModelSerializer):
+    content = MarkdownField()
+
     class Meta:
         model = Skill
         fields = "__all__"
@@ -39,6 +48,9 @@ class SkillSerializer(DynamicFieldsModelSerializer):
 
 class CareerProjectSerializer(serializers.ModelSerializer):
     files = CareerProjectFileSerializer(many=True, source="careerprojectfile_set")
+
+    content = MarkdownField()
+    result = MarkdownField()
 
     class Meta:
         model = CareerProject
@@ -81,12 +93,17 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     files = ProjectFileSerializer(many=True, source="projectfile_set")
     urls = ProjectUrlSerializer(many=True, source="projecturl_set")
 
+    content = MarkdownField()
+    result = MarkdownField()
+
     class Meta:
         model = Project
         fields = ["title", "introduction", "content", "result", "skills", "files", "urls"]
 
 
 class SkillDetailSerializer(serializers.ModelSerializer):
+    description = MarkdownField()
+
     class Meta:
         model = Skill
         fields = ["name", "description"]
