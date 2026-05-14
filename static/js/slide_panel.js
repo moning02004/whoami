@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 "result": "주요 성과",
                 "files": "참고 자료"
             }
-            getPanelBody(bodies, panelBody, data, "career-project-item")
+            getPanelBody(bodies, panelBody, data)
 
         } else if (dataType === "skills") {
             panelTitle.innerHTML = data.name;
