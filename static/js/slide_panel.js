@@ -96,9 +96,20 @@ document.addEventListener('DOMContentLoaded', function () {
         panel.appendChild(itemDiv)
     }
 
-    function openPanel(dataType, data) {
+    async function openPanel(dataId, dataType) {
         const panelTitle = document.getElementById('panel-title')
         const panelBody = document.getElementById("panel-body")
+
+        panelTitle.innerHTML = `<div class="h-6 w-48 bg-gray-200 rounded animate-pulse"></div>`;
+        panelBody.innerHTML = `<div class="flex flex-col gap-4 p-2">
+            <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-4 w-5/6 bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-4 w-4/6 bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-24 w-full bg-gray-200 rounded animate-pulse mt-2"></div>
+            <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-4 w-3/6 bg-gray-200 rounded animate-pulse"></div>
+        </div>`;
+        const data = await fetch(dataId).then(res => res.json())
         panelTitle.innerHTML = "";
         panelBody.innerHTML = "";
 
@@ -147,22 +158,43 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             getPanelBody(attrs, panelBody, data)
         }
+        const panel = document.getElementById('slide-panel')
+        panel.classList.remove('translate-x-full');
+        panel.dataset.label = dataId
+        document.getElementById('main-content').style.marginRight = '50%';
 
-        document.getElementById('slide-panel').classList.remove('translate-x-full', "hidden");
+        if (dataType === "projects") {
+            document.getElementById('project').querySelectorAll(".slide-panel").forEach(x => {
+                x.classList.add("md:w-[100%]")
+                x.classList.remove("md:w-[30%]")
+            })
+        }
     }
 
     function closePanel() {
-        document.getElementById('slide-panel').classList.add('translate-x-full', "hidden");
+        document.getElementById('project').querySelectorAll(".slide-panel").forEach(x => {
+            x.classList.remove("md:w-[100%]")
+            x.classList.add("md:w-[30%]")
+        })
+
+        const panel = document.getElementById('slide-panel')
+        panel.classList.add('translate-x-full');
         document.getElementById('main-content').style.marginRight = '0';
+        delete panel.dataset.label;
     }
 
     document.addEventListener('click', async function (e) {
         const target = e.target.closest('.slide-panel');
         if (target) {
-            e.preventDefault()
-            const dataType = target.dataset.id.toString().split("/")[0]
-            const response = await fetch(target.dataset.id).then(res => res.json())
-            openPanel(dataType, response);
+            const panel = document.getElementById('slide-panel')
+            const dataId = target.dataset.id
+            if (panel.dataset.label === dataId) {
+                closePanel()
+                return
+            }
+
+            const dataType = dataId.toString().split("/")[0]
+            openPanel(dataId, dataType);
             return;
         }
 
