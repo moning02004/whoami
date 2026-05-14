@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             attrDiv.appendChild(keyDiv)
 
             let valueDiv = document.createElement("div")
-            valueDiv.classList.add("text-[1rem]")
+            valueDiv.classList.add("text-[1rem]", "whitespace-pre-wrap")
             if (key === "urls") {
                 valueDiv.classList.add("mb-4", "last:mb-0", "pl-2");
                 data[key].forEach(x => {
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const attrs = {
                 "introduction": "",
                 "period": "재직 기간",
-                "note": "",
+                "note": "참고 사항",
                 "position": "직무 / 직급",
                 "summary": "업무 요약",
                 "skills": "기술스택",
@@ -161,13 +161,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const panel = document.getElementById('slide-panel')
         panel.classList.remove('translate-x-full');
         panel.dataset.label = dataId
-        document.getElementById('main-content').style.marginRight = '50%';
     }
 
     function closePanel() {
         const panel = document.getElementById('slide-panel')
         panel.classList.add('translate-x-full');
-        document.getElementById('main-content').style.marginRight = '0';
         delete panel.dataset.label;
     }
 

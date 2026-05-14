@@ -73,8 +73,8 @@ class CareerDetailSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_period(obj):
-        end = obj.end_date or "재직중"
-        return f"{obj.start_date} - {end}"
+        end = obj.end_date.strftime("%Y. %m. %d") if obj.end_date else "재직중"
+        return f"{obj.start_date.strftime('%Y. %m. %d')} ~ {end}"
 
 
 class ProjectFileSerializer(serializers.ModelSerializer):

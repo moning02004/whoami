@@ -138,8 +138,9 @@
         }
 
         .career-company-note {
-            margin-bottom: 4px;
             font-size: 10pt;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
         }
 
         .career-company-position {
@@ -339,7 +340,7 @@
                         <!-- 좌: 기간 -->
                         <td class="career-left">
                             <div class="career-period">{{ career.start_date|date:'Y. m.' }}
-                                <br/>- {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
+                                <br/>~ {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
                         </td>
 
                         <!-- 우: 상세 -->
