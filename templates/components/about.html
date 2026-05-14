@@ -12,7 +12,7 @@
             <span class="text-[2rem] truncate min-w-0 mr-2">{{ resume.name }}</span>
 
             <div class="flex items-center gap-2 shrink-0">
-                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf">
+                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf" data-id="resume">
                     {% csrf_token %}
                     <input type="hidden" name="type" value="resume">
                     <input type="hidden" name="resume_id" value="{{ request.GET.resume_id }}">
@@ -21,7 +21,7 @@
                         <span class="hidden sm:inline">이력서</span>
                     </button>
                 </form>
-                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf">
+                <form action="{% url 'create_pdf' %}" method="post" class="download-pdf" data-id="portfolio">
                     {% csrf_token %}
                     <input type="hidden" name="type" value="portfolio">
                     <input type="hidden" name="resume_id" value="{{ request.GET.resume_id }}">

@@ -49,7 +49,8 @@ def index(request):
         ),
     )
 
-    resume = queryset.get(is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
+    resume = queryset.get(is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(
+        id=resume_id)
     return render(request, "index.html", {
         "resume": resume,
     })
@@ -100,7 +101,7 @@ def create_pdf(request):
     queryset = Resume.objects.all()
     if request.method == "POST":
         resume_id = request.POST.get("resume_id", "")
-        pdf_type = request.POST["type"]
+        pdf_type = request.POST["type"].lower()
 
         if pdf_type == "resume":
             queryset = queryset.prefetch_related(
@@ -167,10 +168,12 @@ def create_pdf(request):
         html_str = render_to_string('pdf_template.html', context)
         pdf = HTML(string=html_str).write_pdf()
 
-        filename = f"{resume.name} {'이력서' if pdf_type.lower() == 'resume' else '포트폴리오'}"
+        filename = f"{resume.name} {'이력서' if pdf_type == 'resume' else '포트폴리오'}"
         encoded = quote(filename, safe='')
-        return HttpResponse(pdf, content_type='application/pdf',
-                            headers={'Content-Disposition': f'attachment; filename="{encoded}.pdf"'})
+
+        response = HttpResponse(pdf, content_type='application/pdf',
+                                headers={'Content-Disposition': f"attachment; filename*=UTF-8''{encoded}.pdf"})
+        return response
 
     resume_id = request.GET.get("resume_id", "")
     resume = queryset.get(
