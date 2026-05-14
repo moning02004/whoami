@@ -167,7 +167,7 @@ def create_pdf(request):
         html_str = render_to_string('pdf_template.html', context)
         pdf = HTML(string=html_str).write_pdf()
 
-        filename = f"{resume.name} - {pdf_type.upper()}"
+        filename = f"{resume.name} {'이력서' if pdf_type.lower() == 'resume' else '포트폴리오'}"
         encoded = quote(filename, safe='')
         return HttpResponse(pdf, content_type='application/pdf',
                             headers={'Content-Disposition': f'attachment; filename="{encoded}.pdf"'})
