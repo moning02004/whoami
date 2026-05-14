@@ -162,21 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
         panel.classList.remove('translate-x-full');
         panel.dataset.label = dataId
         document.getElementById('main-content').style.marginRight = '50%';
-
-        if (dataType === "projects") {
-            document.getElementById('project').querySelectorAll(".slide-panel").forEach(x => {
-                x.classList.add("md:w-[100%]")
-                x.classList.remove("md:w-[30%]")
-            })
-        }
     }
 
     function closePanel() {
-        document.getElementById('project').querySelectorAll(".slide-panel").forEach(x => {
-            x.classList.remove("md:w-[100%]")
-            x.classList.add("md:w-[30%]")
-        })
-
         const panel = document.getElementById('slide-panel')
         panel.classList.add('translate-x-full');
         document.getElementById('main-content').style.marginRight = '0';
