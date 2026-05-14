@@ -1,3 +1,5 @@
+import re
+
 import markdown
 from django import template
 from django.utils.safestring import mark_safe
@@ -14,4 +16,6 @@ def replace_introduction(instance):
 
 @register.filter
 def to_markdown(value):
+    value = value.replace('\r\n', '\n')
+    value = re.sub(r'\n{3,}', '\n\n<br>\n\n', value)
     return mark_safe(markdown.markdown(value))

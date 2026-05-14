@@ -140,7 +140,6 @@
         .career-company-note {
             margin-bottom: 4px;
             font-size: 10pt;
-            white-space: pre-wrap;
         }
 
         .career-company-position {
@@ -195,7 +194,6 @@
         .skill-description {
             color: var(--text);
             padding-left: 5pt;
-            white-space: pre-wrap;
             line-height: 1.6;
             font-size: 11pt;
         }
@@ -209,7 +207,6 @@
         .project-content {
             color: var(--text);
             padding-left: 5pt;
-            white-space: pre-wrap;
             line-height: 1.6;
             font-size: 11pt;
             margin-bottom: 17pt;
@@ -218,7 +215,6 @@
         .project-result {
             color: var(--text);
             padding-left: 5pt;
-            white-space: pre-wrap;
             line-height: 1.6;
             font-size: 11pt;
         }
@@ -238,6 +234,10 @@
             font-size: 11pt;
             text-indent: 5pt;
             margin-bottom: 4pt;
+        }
+
+        .markdown ul {
+            padding-left: 1rem;
         }
 
         .project-intro {
@@ -320,7 +320,7 @@
     </div>
 
     <!-- 소개 -->
-    <div class="introduction">{{ resume.introduction|to_markdown }}</div>
+    <div class="introduction">{{ resume|replace_introduction|to_markdown }}</div>
     <hr class="divider"/>
 {% endif %}
 
@@ -363,10 +363,10 @@
                                                 <div class="project-introduction">{{ project.introduction }}</div>
                                             {% endif %}
                                             <div class="label">주요 내용</div>
-                                            <div class="project-content">{{ project.content }}</div>
+                                            <div class="project-content markdown">{{ project.content|to_markdown }}</div>
                                             {% if project.result %}
                                                 <div class="label">주요 성과</div>
-                                                <div class="project-result">{{ project.result }}</div>
+                                                <div class="project-result markdown">{{ project.result|to_markdown }}</div>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -401,7 +401,7 @@
                 {% for skill in skills %}
                     <div class="skill-item">
                         <div class="skill-name">{{ skill.name }}</div>
-                        <div class="skill-description">{{ skill.description }}</div>
+                        <div class="skill-description markdown">{{ skill.description|to_markdown }}</div>
                     </div>
                 {% endfor %}
             </div>
@@ -437,10 +437,10 @@
                         {% endif %}
 
                         <div class="label">주요 내용</div>
-                        <div class="project-content">{{ project.content }}</div>
+                        <div class="project-content markdown">{{ project.content|to_markdown }}</div>
                         {% if project.result %}
                             <div class="label">주요 성과</div>
-                            <div class="project-result">{{ project.result }}</div>
+                            <div class="project-result markdown">{{ project.result|to_markdown }}</div>
                         {% endif %}
 
                         <div class="career-tech">
