@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         Object.entries(attrs).forEach(([key, value]) => {
             if (!data[key] || !data[key]?.length) return;
             let attrDiv = document.createElement("div");
-            attrDiv.classList.add("mb-3", "last:mb-0", "flex", "flex-col", "justify-between");
+            attrDiv.classList.add("mb-3", "last:mb-0", "last:mt-[1rem]", "flex", "flex-col", "justify-between");
 
             let keyDiv = document.createElement("div")
             let valueDiv = document.createElement("div")

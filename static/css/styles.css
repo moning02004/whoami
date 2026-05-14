@@ -43,6 +43,10 @@ ul {
     padding-left: 1rem !important;
 }
 
+hr {
+    margin: 1rem 0 !important;
+}
+
 @media (max-width: 640px) {
     .section {
         padding-left: 2rem;
