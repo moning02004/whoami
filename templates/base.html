@@ -14,6 +14,11 @@
     <script src="https://kit.fontawesome.com/db271158c1.js" crossorigin="anonymous"></script>
 </head>
 <body class="w-full md:w-[80%] mx-auto leading-relaxed bg-slate-50 mb-[3rem]">
+
+{% if user.is_superuser %}
+    <div class="my-5"><a class="" href="/admin">편집</a></div>
+{% endif %}
+
 <div class="flex h-full relative" id="page-wrapper">
     <main class="flex-1 transition-all duration-300 ease-in-out" id="main-content">
         {% block content %}{% endblock %}
