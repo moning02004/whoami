@@ -10,6 +10,7 @@ from me.models import Career, Skill, CareerProject, Project, ProjectFile, Career
 class MarkdownField(serializers.CharField):
     def to_representation(self, value):
         value = value.replace('\r\n', '\n')
+        value = re.sub(r'\n{1}', '\n\n', value)
         value = re.sub(r'\n{3,}', '\n\n<br>\n\n', value)
         converted_text = mark_safe(markdown.markdown(value))
         return converted_text
