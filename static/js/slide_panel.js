@@ -76,17 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (key === "files") {
                 valueDiv.classList.add("mb-4", "last:mb-0", "flex", "flex-row", "flex-wrap", "gap-2");
                 data[key].map(x => x.url).forEach(x => {
-                    let fileAnchor = document.createElement("a");
-
                     let fileThumbnail = document.createElement("img");
-                    fileThumbnail.classList.add("block", "project-files", "w-[120px]", "h-[120px]", "bg-cover", "bg-center", "rounded", "cursor-pointer")
-                    fileThumbnail.src = x
+                    fileThumbnail.classList.add("block", "project-files", "border", "w-[120px]", "h-[120px]", "object-cover", "rounded", "cursor-pointer");
+                    fileThumbnail.src = x;
 
-                    fileAnchor.href = x
-                    fileAnchor.appendChild(fileThumbnail)
-
-                    valueDiv.appendChild(fileAnchor)
-                })
+                    fileThumbnail.addEventListener("click", () => openLightbox(x));
+                    valueDiv.appendChild(fileThumbnail);
+                });
             } else {
                 valueDiv.innerHTML = data[key]
             }
@@ -185,7 +181,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const slidePanel = e.target.closest('#slide-panel');
+        const lightboxOverlay = e.target.closest('#lightbox-overlay');
         const closePanelButton = e.target.closest('.close-panel');
-        if (!slidePanel || closePanelButton) closePanel();
+        if (!lightboxOverlay && (!slidePanel || closePanelButton)) closePanel();
     })
 })
