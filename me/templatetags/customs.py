@@ -20,3 +20,8 @@ def to_markdown(value):
     value = re.sub(r'\n{1}', '\n\n', value)
     value = re.sub(r'\n{3,}', '\n\n<br>\n\n', value)
     return mark_safe(markdown.markdown(value))
+
+
+@register.filter
+def split(value, sep="\n"):
+    return value.replace("\r", "").split(sep)
