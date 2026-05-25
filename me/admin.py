@@ -12,6 +12,7 @@ class ExpressionInline(admin.TabularInline):
     show_change_link = True
     extra = 0
     raw_id_fields = ["expression"]
+    ordering = ["order", "expression__order"]
 
 
 class LinkInline(admin.TabularInline):
@@ -61,7 +62,7 @@ class CoverLetterInline(admin.TabularInline):
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ["title", "name", "is_represented", "field_created_at", "field_updated_at"]
+    list_display = ["id", "title", "name", "is_represented", "field_created_at", "field_updated_at"]
     inlines = [ExpressionInline,
                CoverLetterInline,
                LinkInline,
@@ -139,17 +140,17 @@ class ResumeAdmin(admin.ModelAdmin):
 
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ["name", "link"]
+    list_display = ["id", "name", "link"]
 
 
 @admin.register(CoverLetter)
 class CoverLetterAdmin(admin.ModelAdmin):
-    list_display = ["title"]
+    list_display = ["id", "title"]
 
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ["name", "short_description", "order", "is_visible"]
+    list_display = ["id", "name", "short_description", "order", "is_visible"]
 
     @admin.display(description="Description")
     def short_description(self, obj):
@@ -171,8 +172,30 @@ class CareerProjectFileInline(admin.TabularInline):
 
 @admin.register(Career)
 class CareerAdmin(admin.ModelAdmin):
-    list_display = ["company"]
+    list_display = ["id", "company"]
     inlines = [CareerProjectInline]
+    actions = ["action_copy_career"]
+
+    @admin.display(description="경력 복제")
+    def action_copy_career(self, request, queryset):
+        for career in queryset:
+            with transaction.atomic():
+                career.company = f"{career.company} (복제본)"
+
+                projects = list(career.careerproject_set.all())
+
+                career.pk = None
+                career.save()
+
+                def copy_subset(subset):
+                    for x in subset:
+                        x.pk = None
+                        x.career = career
+                        x.save()
+
+                [copy_subset(subset) for subset in [projects]]
+
+        self.message_user(request, f"경력이 복제되었습니다.")
 
 
 @admin.register(CareerProject)
@@ -200,7 +223,8 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Expression)
 class ExpressionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["id", "keyword", "order"]
+    ordering = ["order"]
 
 
 @admin.register(Others)

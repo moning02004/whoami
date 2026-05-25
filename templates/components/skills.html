@@ -1,11 +1,11 @@
 <section id="skills" class="section">
-    <div class="text-section tracking-[0.16em] uppercase mb-5"># 보유 기술</div>
+    <div class="text-section  uppercase mb-5"># 보유 기술</div>
 
     <div class="flex flex-col gap-10" id="skills-list">
         <!-- Languages -->
         <div class="flex flex-wrap gap-3">
             {% for skill in resume.skills.all %}
-                <span class="slide-panel text-accent border border-accent-border px-3 py-1 rounded-[0.5rem] tracking-wide cursor-pointer hover:bg-[#efefef]"
+                <span class="slide-panel px-3 py-1 rounded-[0.5rem] bg-gray-200 cursor-pointer hover:bg-gray-300"
                       data-id="skills/{{ skill.id }}">
                 {{ skill.name }}
                 </span>

@@ -104,6 +104,9 @@ collectstatic: ## 스태틱 파일 수집
 check: ## Django 시스템 체크
 	docker compose $(COMPOSE_FILE) exec $(SERVICE) python manage.py check
 
+.PHONY: check
+mm: makemigrations migrate ## makemigrations && migrate 동시 실행
+
 # ================================
 # Database
 # ================================

@@ -163,6 +163,7 @@ class Resume(models.Model):
     title = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=100)
     birth = models.DateField()
+    phone = models.CharField(max_length=100)
 
     profile_image = models.ImageField(upload_to="profile_images/")
     introduction = models.TextField()

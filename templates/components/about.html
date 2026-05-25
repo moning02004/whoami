@@ -1,6 +1,20 @@
 {% load customs %}
 
 <section id="about" class="section pt-10">
+    <div class="mb-5">
+        <div class="text-[2rem]">{{ resume.title }}</div>
+
+        {% if resume.expressions.all %}
+            <div class="flex flex-wrap gap-2">
+                {% for x in resume.expressions.all %}
+                    <span class="bg-gray-200 px-3 py-1 rounded-[0.5rem] ">
+                    {{ x.keyword }}
+                </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
     <div class="mb-3">
         <img id="profile-img"
              src="{{ resume.profile_image.url }}"
@@ -33,29 +47,23 @@
             </div>
         </div>
 
-        <div class="flex gap-2">
-            <button onclick="location.href='mailto:{{ resume.email }}'" class="text-[1.5rem]">
+        <div>
+            <div>
                 <i class="fa-solid fa-envelope"></i>
-            </button>
+                <span>{{ resume.email }}</span>
+            </div>
             {% for x in resume.links.all %}
-                <a href="{{ x.link }}" target="_blank" class="text-[1.5rem]">
+                <div>
                     <i class="{{ x.icon_class }}"></i>
-                </a>
+                    <a href="{{ x.link }}" class="hover:underline" target="_blank">{{ x.link }}</a>
+                </div>
             {% endfor %}
         </div>
+
     </div>
 
     {% if resume.introduction %}
         <div class="text-[1rem] [&_ul]:space-y-2 [&_li]:leading-normal my-3 font-pretendard">{{ resume|replace_introduction|to_markdown }}</div>
     {% endif %}
 
-    {% if resume.expression_set.all %}
-        <div class="flex flex-wrap gap-2">
-            {% for x in resume.expression_set.all %}
-                <span class="text-accent bg-accent-bg border border-accent-border px-3 py-1 rounded-[0.5rem] tracking-wide">
-                    {{ x.keyword }}
-                </span>
-            {% endfor %}
-        </div>
-    {% endif %}
 </section>
