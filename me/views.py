@@ -101,76 +101,65 @@ def create_pdf(request):
     queryset = Resume.objects.all()
     if request.method == "POST":
         resume_id = request.POST.get("resume_id", "")
-        pdf_type = request.POST["type"].lower()
 
-        if pdf_type == "resume":
-            queryset = queryset.prefetch_related(
-                Prefetch(
-                    'links',
-                    queryset=Link.objects.annotate(
-                        effective_order=Least('resumelink__order', 'order')
-                    ).order_by('effective_order', "id").distinct()
-                ),
+        queryset = queryset.prefetch_related(
+            Prefetch(
+                'links',
+                queryset=Link.objects.annotate(
+                    effective_order=Least('resumelink__order', 'order')
+                ).order_by('effective_order', "id").distinct()
+            ),
 
-                Prefetch('careers',
-                         queryset=Career.objects.all().prefetch_related(
-                             "skills",
-                             Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
-                         ).annotate(
-                             exit_date=Coalesce("end_date", datetime.now().date()),
-                         ).order_by("-exit_date")),
+            Prefetch('careers',
+                     queryset=Career.objects.all().prefetch_related(
+                         "skills",
+                         Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
+                     ).annotate(
+                         exit_date=Coalesce("end_date", datetime.now().date()),
+                     ).order_by("-exit_date")),
 
-                Prefetch('cover_letters',
-                         queryset=CoverLetter.objects.order_by("resumecoverletter__order", "id").distinct()),
-                Prefetch('others',
-                         queryset=Others.objects.annotate(
-                             effective_order=Least('resumeothers__order', 'order')
-                         ).order_by('effective_order', "id").distinct()
-                         ),
-            )
-            resume = queryset.get(
-                is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
-            context = {
-                "resume": resume,
-                "links": resume.links.all(),
-                "careers": resume.careers.all(),
-                "others": resume.others.all(),
-                "cover_letters": resume.cover_letters.all()
-            }
-        else:
-            queryset = queryset.prefetch_related(
-                Prefetch(
-                    'skills',
-                    queryset=Skill.objects.annotate(
-                        effective_order=Least('resumeskill__order', 'order')
-                    ).filter(is_visible=True).order_by('effective_order', "id").distinct()
-                ),
-                Prefetch(
-                    'projects',
-                    queryset=Project.objects.prefetch_related(
-                        "skills",
-                        Prefetch(
-                            "projecturl_set",
-                            ProjectUrl.objects.all().annotate(
-                                keyword=Case(When(name="", then=F("url"))), default=F("name")))
-                    ).annotate(
-                        effective_order=Least('resumeproject__order', 'order')
-                    ).order_by('effective_order', "id").distinct()
-                ),
-            )
-            resume = queryset.get(
-                is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
-            context = {
-                "skills": resume.skills.all(),
-                "projects": resume.projects.all(),
-            }
+            Prefetch('cover_letters',
+                     queryset=CoverLetter.objects.order_by("resumecoverletter__order", "id").distinct()),
+            Prefetch('others',
+                     queryset=Others.objects.annotate(
+                         effective_order=Least('resumeothers__order', 'order')
+                     ).order_by('effective_order', "id").distinct()
+                     ),
+            Prefetch(
+                'skills',
+                queryset=Skill.objects.annotate(
+                    effective_order=Least('resumeskill__order', 'order')
+                ).filter(is_visible=True).order_by('effective_order', "id").distinct()
+            ),
+            Prefetch(
+                'projects',
+                queryset=Project.objects.prefetch_related(
+                    "skills",
+                    Prefetch(
+                        "projecturl_set",
+                        ProjectUrl.objects.all().annotate(
+                            keyword=Case(When(name="", then=F("url"))), default=F("name")))
+                ).annotate(
+                    effective_order=Least('resumeproject__order', 'order')
+                ).order_by('effective_order', "id").distinct()
+            ),
+        )
+        resume = queryset.get(
+            is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
+        context = {
+            "resume": resume,
+            "links": resume.links.all(),
+            "careers": resume.careers.all(),
+            "others": resume.others.all(),
+            "cover_letters": resume.cover_letters.all(),
+            "skills": resume.skills.all(),
+            "projects": resume.projects.all(),
+        }
 
         html_str = render_to_string('pdf_template.html', context)
         pdf = HTML(string=html_str).write_pdf()
 
-        filename = f"{resume.name} {'이력서' if pdf_type == 'resume' else '포트폴리오'}"
-        encoded = quote(filename, safe='')
-
+        encoded = quote(resume.title, safe='')
         response = HttpResponse(pdf, content_type='application/pdf',
                                 headers={'Content-Disposition': f"attachment; filename*=UTF-8''{encoded}.pdf"})
         return response

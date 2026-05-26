@@ -46,7 +46,6 @@
         .header-name {
             font-size: 20pt;
             font-weight: 700;
-            letter-spacing: -0.02em;
             line-height: 1.1;
             color: var(--text);
             margin-bottom: 8pt;
@@ -62,23 +61,16 @@
 
         /* ── INTRO ── */
         .introduction {
+            margin-bottom: 30pt;
             color: var(--text);
-            padding-left: 1rem;
             line-height: 1.6;
             font-size: 11pt;
-        }
-
-        /* ── DIVIDER ── */
-        .divider {
-            border-top: 1.5px solid var(--border);
-            margin: 30pt 0;
         }
 
         /* ── SECTION LABEL ── */
         .section-label {
             font-family: var(--font-mono);
             color: var(--accent);
-            letter-spacing: 0.18em;
             text-transform: uppercase;
             margin-bottom: 12px;
         }
@@ -88,32 +80,9 @@
         }
 
         /* ── CAREER (table 방식) ── */
-        .career-list {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .career-left {
-            width: 110px;
-            vertical-align: top;
-            padding: 13pt 16px 13pt 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .career-right {
-            vertical-align: top;
-            padding: 13pt 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .career-item:last-child .career-left,
-        .career-item:last-child .career-right {
-            border-bottom: 0;
-        }
-
         .career-period {
             font-family: var(--font-mono);
-            font-size: 9pt;
+            font-size: 10pt;
             color: var(--muted);
             line-height: 1.5;
             white-space: nowrap;
@@ -130,8 +99,30 @@
             margin-bottom: 1px;
         }
 
+        .career-item {
+            position: relative;
+            border-left: 3px solid #8484ff;
+            padding-left: 10pt;
+            padding-bottom: 5pt;
+        }
+
+        .project-item:not(:last-child),
+        .career-item:not(:last-child) {
+            margin-bottom: 30pt;
+        }
+
+        .career-ring {
+            position: absolute;
+            left: -4pt;
+            height: 8px;
+            width: 8px;
+            border-radius: 9999px;
+            border: 2px solid #8484ff;
+            background-color: #8484ff;
+        }
+
         .career-company-intro {
-            font-weight: 300;
+            font-weight: 400;
             color: var(--muted);
             margin-bottom: 4px;
             font-size: 9pt;
@@ -165,6 +156,8 @@
             padding: 1px 6px;
             border-radius: 3px;
             background-color: var(--box);
+            display: inline-block;
+            margin-bottom: 5pt;
         }
 
         /* ── SKILLS ── */
@@ -172,17 +165,10 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }
 
         .skill-item {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .skill-item:last-child {
-            border-bottom: none;
+            margin-bottom: 15pt;
         }
 
         .skill-name {
@@ -200,38 +186,45 @@
         }
 
         /* ── PROJECTS ── */
+        .career-project-item {
+            border-left: 1px solid gray;
+            margin-left: 10pt;
+            margin-top: 10pt;
+            padding: 5pt 0 0 10pt;
+        }
+
         .project-item {
-            border-bottom: 1px solid var(--border);
-            padding: 13pt 0;
+            position: relative;
+            margin-bottom: 20pt;
+            padding-left: 10pt;
+            padding-bottom: 5pt;
+            border-left: 3px solid #8484ff;
+        }
+
+        .career-project-item:not(:last-child),
+        .cover-letter-item:not(:last-child) {
+            margin-bottom: 20pt;
         }
 
         .project-content {
             color: var(--text);
             padding-left: 5pt;
-            line-height: 1.6;
             font-size: 11pt;
-            margin-bottom: 17pt;
+        }
+
+        .project-content:not(:last-child) {
+            margin-bottom: 8pt;
         }
 
         .project-result {
             color: var(--text);
             padding-left: 5pt;
-            line-height: 1.6;
             font-size: 11pt;
         }
 
-        .project-item:last-child {
-            border-bottom: 0;
-        }
-
-        .project-name {
-            font-weight: 700;
-            color: var(--text);
-        }
         .cover-letter-intro {
             padding-left: 5pt;
             white-space: pre-wrap;
-            line-height: 1.6;
             font-size: 11pt;
             text-indent: 5pt;
             margin-bottom: 4pt;
@@ -263,7 +256,10 @@
         }
 
         .title {
+            font-weight: 700;
+            color: var(--text);
             font-size: 13pt;
+            margin-bottom: 3pt;
         }
 
         .url {
@@ -309,6 +305,9 @@
             <div class="header-name">{{ resume.name }}</div>
             <div class="header-contacts">
                 <div class="header-contact">
+                    <span>{{ resume.phone }}</span>
+                </div>
+                <div class="header-contact">
                     <span>{{ resume.email }}</span>
                 </div>
                 {% for x in links %}
@@ -322,7 +321,6 @@
 
     <!-- 소개 -->
     <div class="introduction">{{ resume|replace_introduction|to_markdown }}</div>
-    <hr class="divider"/>
 {% endif %}
 
 <!-- ══════════════════════════════
@@ -333,67 +331,59 @@
         <div class="section">
             <div class="section-label"># 경력</div>
 
-            <table class="career-list">
+            <div>
                 {% for career in careers %}
-                    <tr class="career-item">
-
-                        <!-- 좌: 기간 -->
-                        <td class="career-left">
-                            <div class="career-period">{{ career.start_date|date:'Y. m.' }}
-                                <br/>~ {{ career.end_date|date:'Y. m.'|default:'재직중' }}</div>
-                        </td>
-
-                        <!-- 우: 상세 -->
-                        <td class="career-right">
-                            <div style="border-bottom: 1px solid #efefef; padding-bottom: 5px;">
-                                <div class="career-company">{{ career.company }}</div>
-                                <div class="career-company-intro">{{ career.introduction }}</div>
-                                <div class="career-company-note">{{ career.note }}</div>
-                                <div class="career-company-position">{{ career.position }}</div>
-                                <div>{{ career.summary }}</div>
+                    <div class="career-item">
+                        <div class="career-ring"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <div class="career-company">{{ career.company }}</div>
+                            <div class="career-period">
+                                {{ career.start_date|date:'Y. m.' }} ~ {{ career.end_date|date:'Y. m.'|default:'재직중' }}
                             </div>
+                        </div>
 
-                            <div>
-                                {% for project in career.careerproject_set.all %}
-                                    <div class="project-item">
-                                        <div class="project-name title">{{ project.title }}</div>
+                        <div class="career-company-intro">{{ career.introduction }}</div>
+                        {% if career.note %}
+                            <div class="career-company-note">{{ career.note }}</div>
+                        {% endif %}
+                        <div class="career-company-position">{{ career.position }}</div>
+                        <div>{{ career.summary }}</div>
 
-                                        <div style="padding-left: 10pt;">
-                                            <div class="project-intro">{{ project.period }}</div>
-                                            {% if project.introduction %}
-                                                <div class="project-introduction">{{ project.introduction }}</div>
-                                            {% endif %}
-                                            <div class="label">주요 내용</div>
-                                            <div class="project-content markdown">{{ project.content|to_markdown }}</div>
-                                            {% if project.result %}
-                                                <div class="label">주요 성과</div>
-                                                <div class="project-result markdown">{{ project.result|to_markdown }}</div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
+                        <div class="career-tech">
+                            {% for tech in career.skills.all %}
+                                <span class="tag">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
 
-                            <!-- 회사 보유기술 -->
-                            <div class="career-tech">
-                                <div class="tag-row">
-                                    {% for tech in career.skills.all %}
-                                        <span class="tag">{{ tech }}</span>
-                                    {% endfor %}
+                        {% for project in career.careerproject_set.all %}
+                            <div class="career-project-item">
+                                <div class="project-name title">{{ project.title }}</div>
+
+                                <div style="padding-left: 10pt;">
+                                    {% if project.period %}
+                                        <div class="project-intro">{{ project.period }}</div>
+                                    {% endif %}
+                                    {% if project.introduction %}
+                                        <div class="project-introduction">{{ project.introduction }}</div>
+                                    {% endif %}
+                                    <div class="label">주요 내용</div>
+                                    <div class="project-content markdown">{{ project.content|to_markdown }}</div>
+                                    {% if project.result %}
+                                        <div class="label">주요 성과</div>
+                                        <div class="project-result markdown">{{ project.result|to_markdown }}</div>
+                                    {% endif %}
                                 </div>
                             </div>
-                        </td>
-
-                    </tr>
+                        {% endfor %}
+                    </div>
                 {% endfor %}
-            </table>
+            </div>
         </div>
-        <hr class="divider"/>
     {% endif %}
 
     <!-- ══════════════════════════════
-         SKILLS
-    ══════════════════════════════ -->
+		 SKILLS
+	══════════════════════════════ -->
     {% if skills %}
         <div class="section">
             <div class="section-label"># 보유 기술</div>
@@ -407,12 +397,11 @@
                 {% endfor %}
             </div>
         </div>
-        <hr class="divider"/>
     {% endif %}
 
     <!-- ══════════════════════════════
-         PROJECTS
-    ══════════════════════════════ -->
+		 PROJECTS
+	══════════════════════════════ -->
     {% if projects %}
         <div class="section">
             <div class="section-label"># 프로젝트</div>
@@ -420,10 +409,19 @@
             <div>
                 {% for project in projects %}
                     <div class="project-item">
+                        <div class="career-ring"></div>
 
                         <div>
                             <div class="project-name title">{{ project.title }}</div>
                             <div class="project-intro">{{ project.introduction }}</div>
+                        </div>
+
+                        <div class="career-tech">
+                            <div class="tag-row">
+                                {% for tag in project.skills.all %}
+                                    <span class="tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
                         </div>
 
                         {% if project.projecturl_set.all %}
@@ -443,19 +441,10 @@
                             <div class="label">주요 성과</div>
                             <div class="project-result markdown">{{ project.result|to_markdown }}</div>
                         {% endif %}
-
-                        <div class="career-tech">
-                            <div class="tag-row">
-                                {% for tag in project.skills.all %}
-                                    <span class="tag">{{ tag }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
-        <hr class="divider"/>
     {% endif %}
 
     {% if cover_letters %}
@@ -463,12 +452,12 @@
             <div class="section-label"># 자기소개서</div>
             <div>
                 {% for cover_letter in cover_letters %}
-                    <div class="project-item">
-                        <div class="project-name title">{{ cover_letter.title }}</div>
+                    <div class="cover-letter-item">
+                        <div class="title">{{ cover_letter.title }}</div>
                         <div>
-                          {% for line in cover_letter.content.splitlines %}
-                            <p class="indent-8 cover-letter-intro">{{ line }}</p>
-                          {% endfor %}
+                            {% for line in cover_letter.content.splitlines %}
+                                <p class="indent-8 cover-letter-intro">{{ line }}</p>
+                            {% endfor %}
                         </div>
                     </div>
                 {% endfor %}
@@ -489,7 +478,6 @@
                 {% endfor %}
             </div>
         </div>
-        <hr class="divider"/>
     {% endif %}
 
 </div>
