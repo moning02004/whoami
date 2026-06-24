@@ -164,12 +164,12 @@ class Resume(models.Model):
     name = models.CharField(max_length=100)
     birth = models.DateField()
     phone = models.CharField(max_length=100)
-    is_blinded_phone = models.BooleanField(default=False)
+    is_blinded_phone = models.BooleanField(default=False, choices=[(True, "예"), (False, "아니오")])
 
     profile_image = models.ImageField(upload_to="profile_images/")
     introduction = models.TextField()
     email = models.EmailField()
-    is_blinded_email = models.BooleanField(default=False)
+    is_blinded_email = models.BooleanField(default=False, choices=[(True, "예"), (False, "아니오")])
     is_represented = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)

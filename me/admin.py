@@ -74,6 +74,7 @@ class ResumeAdmin(admin.ModelAdmin):
     actions = ["action_select_active", "action_copy_resume"]
     ordering = ["-is_represented", "-updated_at", "-created_at"]
     readonly_fields = ["field_check_resume"]
+    radio_fields = {"is_blinded_email": admin.HORIZONTAL, "is_blinded_phone": admin.HORIZONTAL}
 
     def get_fields(self, request, obj=None):
         return ["field_check_resume"] + super().get_fields(request, obj)
