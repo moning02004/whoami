@@ -101,7 +101,7 @@
 
         .career-item {
             position: relative;
-            border-left: 3px solid #8484ff;
+            border-left: 3px solid gray;
             padding-left: 10pt;
             padding-bottom: 5pt;
         }
@@ -117,8 +117,8 @@
             height: 8px;
             width: 8px;
             border-radius: 9999px;
-            border: 2px solid #8484ff;
-            background-color: #8484ff;
+            border: 2px solid gray;
+            background-color: gray;
         }
 
         .career-company-intro {
@@ -187,7 +187,7 @@
 
         /* ── PROJECTS ── */
         .career-project-item {
-            border-left: 1px solid gray;
+            border-left: 1px solid lightgray;
             margin-left: 10pt;
             margin-top: 10pt;
             padding: 5pt 0 0 10pt;
@@ -198,7 +198,7 @@
             margin-bottom: 20pt;
             padding-left: 10pt;
             padding-bottom: 5pt;
-            border-left: 3px solid #8484ff;
+            border-left: 3px solid gray;
         }
 
         .career-project-item:not(:last-child),
@@ -304,12 +304,16 @@
         <div class="header-info">
             <div class="header-name">{{ resume.name }}</div>
             <div class="header-contacts">
-                <div class="header-contact">
-                    <span>{{ resume.phone }}</span>
-                </div>
-                <div class="header-contact">
-                    <span>{{ resume.email }}</span>
-                </div>
+                {% if not resume.is_blinded_phone %}
+                    <div class="header-contact">
+                        <span>{{ resume.phone }}</span>
+                    </div>
+                {% endif %}
+                {% if not resume.is_blinded_email %}
+                    <div class="header-contact">
+                        <span>{{ resume.email }}</span>
+                    </div>
+                {% endif %}
                 {% for x in links %}
                     <div class="header-contact">
                         <span>{{ x.link }}</span>
