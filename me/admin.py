@@ -134,7 +134,9 @@ class ResumeAdmin(admin.ModelAdmin):
                     x.resume = resume
                     x.save()
 
-            [copy_subset(subset) for subset in [links, expressions, skills, careers, projects, others, cover_letters]]
+            [copy_subset(subset) for subset in [links, expressions, careers, projects, others, cover_letters]]
+            for x in skills:
+                resume.skills.add(x.skill.pk)
 
         self.message_user(request, f"{resume.name} 이력서가 복제되었습니다.")
 
@@ -184,6 +186,7 @@ class CareerAdmin(admin.ModelAdmin):
                 career.company = f"{career.company} (복제본)"
 
                 projects = list(career.careerproject_set.all())
+                career_skills = list(career.skills.all())
 
                 career.pk = None
                 career.save()
@@ -195,6 +198,8 @@ class CareerAdmin(admin.ModelAdmin):
                         x.save()
 
                 [copy_subset(subset) for subset in [projects]]
+                for x in career_skills:
+                    career.skills.add(x.pk)
 
         self.message_user(request, f"경력이 복제되었습니다.")
 
