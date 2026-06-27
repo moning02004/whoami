@@ -38,12 +38,22 @@ def index(request):
                 effective_order=Least('resumeskill__order', 'order')
             ).filter(is_visible=True).order_by('effective_order').distinct()
         ),
-        Prefetch('careers', queryset=Career.objects.all().prefetch_related("skills").annotate(
+        Prefetch('careers', queryset=Career.objects.all().prefetch_related(
+            Prefetch(
+                'skills',
+                queryset=Skill.objects.all().order_by('order').distinct()
+            )
+        ).annotate(
             exit_date=Coalesce("end_date", datetime.now().date()),
         ).order_by("-exit_date")),
         Prefetch(
             'projects',
-            queryset=Project.objects.prefetch_related("skills").annotate(
+            queryset=Project.objects.prefetch_related(
+                Prefetch(
+                    'skills',
+                    queryset=Skill.objects.all().order_by('order').distinct()
+                )
+            ).annotate(
                 effective_order=Least('resumeproject__order', 'order')
             ).order_by('effective_order').distinct()
         ),
@@ -60,7 +70,10 @@ class CareerDetailViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Career.objects.all().prefetch_related(
-            "skills",
+            Prefetch(
+                'skills',
+                queryset=Skill.objects.all().order_by('order').distinct()
+            ),
             Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
         )
 
@@ -72,13 +85,18 @@ class CareerDetailViewSet(viewsets.ModelViewSet):
 
 class ProjectDetailViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        queryset = Project.objects.prefetch_related("skills", "projectfile_set",
-                                                    Prefetch(
-                                                        "projecturl_set",
-                                                        ProjectUrl.objects.all().annotate(
-                                                            keyword=Case(When(name="", then=F("url"))),
-                                                            default=F("name")))
-                                                    )
+        queryset = Project.objects.prefetch_related(
+            Prefetch(
+                'skills',
+                queryset=Skill.objects.all().order_by('order').distinct()
+            ),
+            "projectfile_set",
+            Prefetch(
+                "projecturl_set",
+                ProjectUrl.objects.all().annotate(
+                    keyword=Case(When(name="", then=F("url"))),
+                    default=F("name")))
+        )
         return queryset
 
     def get_serializer_class(self):
