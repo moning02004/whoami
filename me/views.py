@@ -116,52 +116,57 @@ class SkillViewSet(viewsets.ModelViewSet):
 
 
 def create_pdf(request):
-    queryset = Resume.objects.all()
+    queryset = Resume.objects.prefetch_related(
+        Prefetch(
+            'links',
+            queryset=Link.objects.annotate(
+                effective_order=Least('resumelink__order', 'order')
+            ).order_by('effective_order', "id").distinct()
+        ),
+
+        Prefetch('careers',
+                 queryset=Career.objects.all().prefetch_related(
+                     Prefetch(
+                         'skills',
+                         queryset=Skill.objects.all().order_by('order').distinct()
+                     ),
+                     Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
+                 ).annotate(
+                     exit_date=Coalesce("end_date", datetime.now().date()),
+                 ).order_by("-exit_date")),
+
+        Prefetch('cover_letters',
+                 queryset=CoverLetter.objects.order_by("resumecoverletter__order", "id").distinct()),
+        Prefetch('others',
+                 queryset=Others.objects.annotate(
+                     effective_order=Least('resumeothers__order', 'order')
+                 ).order_by('effective_order', "id").distinct()
+                 ),
+        Prefetch(
+            'skills',
+            queryset=Skill.objects.annotate(
+                effective_order=Least('resumeskill__order', 'order')
+            ).filter(is_visible=True).order_by('effective_order', "id").distinct()
+        ),
+        Prefetch(
+            'projects',
+            queryset=Project.objects.prefetch_related(
+                Prefetch(
+                    'skills',
+                    queryset=Skill.objects.all().order_by('order').distinct()
+                ),
+                Prefetch(
+                    "projecturl_set",
+                    ProjectUrl.objects.all().annotate(
+                        keyword=Case(When(name="", then=F("url"))), default=F("name")))
+            ).annotate(
+                effective_order=Least('resumeproject__order', 'order')
+            ).order_by('effective_order', "id").distinct()
+        ),
+    )
+
     if request.method == "POST":
         resume_id = request.POST.get("resume_id", "")
-
-        queryset = queryset.prefetch_related(
-            Prefetch(
-                'links',
-                queryset=Link.objects.annotate(
-                    effective_order=Least('resumelink__order', 'order')
-                ).order_by('effective_order', "id").distinct()
-            ),
-
-            Prefetch('careers',
-                     queryset=Career.objects.all().prefetch_related(
-                         "skills",
-                         Prefetch("careerproject_set", queryset=CareerProject.objects.all().order_by("order", "id"))
-                     ).annotate(
-                         exit_date=Coalesce("end_date", datetime.now().date()),
-                     ).order_by("-exit_date")),
-
-            Prefetch('cover_letters',
-                     queryset=CoverLetter.objects.order_by("resumecoverletter__order", "id").distinct()),
-            Prefetch('others',
-                     queryset=Others.objects.annotate(
-                         effective_order=Least('resumeothers__order', 'order')
-                     ).order_by('effective_order', "id").distinct()
-                     ),
-            Prefetch(
-                'skills',
-                queryset=Skill.objects.annotate(
-                    effective_order=Least('resumeskill__order', 'order')
-                ).filter(is_visible=True).order_by('effective_order', "id").distinct()
-            ),
-            Prefetch(
-                'projects',
-                queryset=Project.objects.prefetch_related(
-                    "skills",
-                    Prefetch(
-                        "projecturl_set",
-                        ProjectUrl.objects.all().annotate(
-                            keyword=Case(When(name="", then=F("url"))), default=F("name")))
-                ).annotate(
-                    effective_order=Least('resumeproject__order', 'order')
-                ).order_by('effective_order', "id").distinct()
-            ),
-        )
         resume = queryset.get(
             is_represented=True) if not resume_id or not request.user.is_superuser else queryset.get(id=resume_id)
         context = {
