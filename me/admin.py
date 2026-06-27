@@ -154,6 +154,7 @@ class CoverLetterAdmin(admin.ModelAdmin):
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "short_description", "order", "is_visible"]
+    ordering = ["-is_visible", "order"]
 
     @admin.display(description="Description")
     def short_description(self, obj):
