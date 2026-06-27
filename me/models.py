@@ -49,7 +49,7 @@ class Career(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
 
-    introduction = models.CharField(max_length=255, blank=True)
+    introduction = models.TextField(blank=True)
     note = models.TextField(blank=True)
     summary = models.CharField(max_length=255, blank=True)
     skills = models.ManyToManyField(Skill)
@@ -66,7 +66,7 @@ class CareerProject(models.Model):
     career = models.ForeignKey(Career, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=100)
-    introduction = models.CharField(max_length=255, blank=True)
+    introduction = models.TextField(blank=True)
 
     period = models.CharField(max_length=30, blank=True)
     content = models.TextField(blank=True)
@@ -110,7 +110,7 @@ class Others(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=100)
-    introduction = models.CharField(max_length=255, blank=True)
+    introduction = models.TextField(blank=True)
     order = models.IntegerField(default=100)
 
     content = models.TextField(blank=True)
