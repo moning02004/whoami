@@ -224,7 +224,7 @@ class ProjectUrlInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ["title", "introduction"]
+    list_display = ["title", "summary"]
     inlines = [ProjectFileInline, ProjectUrlInline]
 
 

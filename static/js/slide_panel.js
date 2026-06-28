@@ -134,13 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         } else if (dataType === "projects") {
             const attrs = {
-                "introduction": "",
+                "summary": "",
                 "skills": "기술스택",
                 "urls": "관련 링크",
             }
             getPanelAttribute(attrs, panelBody, data)
             panelTitle.innerHTML = data.title;
             let bodies = {
+                "introduction": "",
                 "content": "주요 내용",
                 "result": "주요 성과",
                 "files": "참고 자료"

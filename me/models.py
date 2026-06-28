@@ -110,6 +110,7 @@ class Others(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=100)
+    summary = models.TextField(blank=True)
     introduction = models.TextField(blank=True)
     order = models.IntegerField(default=100)
 

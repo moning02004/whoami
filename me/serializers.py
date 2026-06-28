@@ -99,12 +99,14 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     files = ProjectFileSerializer(many=True, source="projectfile_set")
     urls = ProjectUrlSerializer(many=True, source="projecturl_set")
 
+    summary = MarkdownField()
+    introduction = MarkdownField()
     content = MarkdownField()
     result = MarkdownField()
 
     class Meta:
         model = Project
-        fields = ["title", "introduction", "content", "result", "skills", "files", "urls"]
+        fields = ["title", "summary", "introduction", "content", "result", "skills", "files", "urls"]
 
 
 class SkillDetailSerializer(serializers.ModelSerializer):
