@@ -417,7 +417,7 @@
 
                         <div>
                             <div class="project-name title">{{ project.title }}</div>
-                            <div class="project-intro">{{ project.introduction }}</div>
+                            <div class="project-intro">{{ project.summary|to_markdown }}</div>
                         </div>
 
                         <div class="career-tech">
@@ -439,6 +439,7 @@
                             </div>
                         {% endif %}
 
+                        <div class="project-content markdown">{{ project.introduction|to_markdown }}</div>
                         <div class="label">주요 내용</div>
                         <div class="project-content markdown">{{ project.content|to_markdown }}</div>
                         {% if project.result %}
